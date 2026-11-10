@@ -1,0 +1,25 @@
+# 依赖（只有窗口模式需要）
+.venv/
+
+# 运行时数据：对话、备份、快照 —— 绝不外泄
+saves/
+backups/
+
+# 密钥与本地连接配置
+.apikey
+bridge_config.json
+
+# SnowLuma 凭据（本地生成的旧位置）
+saves/_ops/
+
+# Python
+__pycache__/
+*.pyc
+
+# 日志
+*.log
+
+# 编辑器
+.vscode/
+.idea/
+.DS_Store

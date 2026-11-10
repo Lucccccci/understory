@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="{{THEME}}">
+<head>
+<meta charset="utf-8">
+<title>mind · 内在生活</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div id="inkDrift" aria-hidden="true"></div>
+
+<!-- 未设置密钥时的遮罩 -->
+<div id="keyGate" class="gate hidden">
+  <div class="gate-box">
+    <h2>先设一下 API 密钥</h2>
+    <p class="gate-note">
+      需要一个 DeepSeek API 密钥才能说话。<br>
+      密钥只保存在你本机（<code>mind-life/.apikey</code>），不会外传。<br>
+      也可以改用环境变量 <code>MIND_AI_API_KEY</code>，程序会优先读它。
+    </p>
+    <input id="keyInput" type="password" placeholder="sk-..." autocomplete="off">
+    <div class="gate-actions">
+      <button id="keySave">保存并开始</button>
+    </div>
+    <div id="keyError" class="gate-error"></div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- 左：立绘 + 她的日子 -->
+  <aside class="panel">
+    <!-- 节令纹样：取自她的设定元素（稻穗 / 玉琮 / 龙角），按当前节气变化。
+         原设计只有 20px 高，实测缩小后看不清是什么，故放大并加密笔画。 -->
+    <div class="season-mark" id="seasonMark" title="节令">
+      <svg viewBox="0 0 96 34" class="ornament" aria-hidden="true">
+        <!-- 稻穗：一根穗轴 + 六粒谷 -->
+        <g class="orn-rice">
+          <path d="M16 30 Q15 18 14 7" />
+          <path d="M14.6 9  q4 -3.4 6.6 -1.8 q-3 3 -6.6 1.8z" />
+          <path d="M14.4 14 q4 -3.4 6.6 -1.8 q-3 3 -6.6 1.8z" />
+          <path d="M14.2 19 q4 -3.4 6.6 -1.8 q-3 3 -6.6 1.8z" />
+          <path d="M14.8 10.4 q-4 -3 -6.4 -1.2 q2.8 2.8 6.4 1.2z" />
+          <path d="M14.6 15.4 q-4 -3 -6.4 -1.2 q2.8 2.8 6.4 1.2z" />
+          <path d="M14.4 20.4 q-4 -3 -6.4 -1.2 q2.8 2.8 6.4 1.2z" />
+        </g>
+        <!-- 玉琮：外方内圆，四角各一道刻线 -->
+        <g class="orn-jade">
+          <rect x="39" y="7" width="18" height="20" rx="1.5" />
+          <circle cx="48" cy="17" r="5" />
+          <path d="M42 7 v-3 M54 7 v-3 M42 27 v3 M54 27 v3" />
+        </g>
+        <!-- 龙角：分叉的鹿形角 -->
+        <g class="orn-horn">
+          <path d="M72 30 q1 -10 7 -16" />
+          <path d="M74 22 q-4 -2 -6 -6" />
+          <path d="M79 14 q4 -1 6 -5" />
+          <path d="M76 18 q5 0 8 -2" />
+        </g>
+      </svg>
+      <span id="seasonText"></span>
+    </div>
+
+    <div class="portrait-frame">
+      <img id="portrait" src="/portrait/face_default" alt="她">
+    </div>
+    <div class="name-row">
+      <span class="name">她</span>
+      <span class="stage" id="stageName">初识</span>
+    </div>
+
+    <div class="affection">
+      <div class="bar"><div class="bar-fill" id="affBar"></div></div>
+      <div class="bar-label">
+        <span id="affText">在一起 · 第 — 天</span>
+        <span id="affNext"></span>
+      </div>
+    </div>
+
+    <!-- 常驻区：她此刻 -->
+    <div class="card life note-card">
+      <div class="life-title life-title-row">她此刻<button id="btnRegenLife" class="regen-btn" type="button" title="重新想一下她此刻在做什么"><svg viewBox="0 0 16 16" aria-hidden="true"><path d="M13 8a5 5 0 1 1-1.6-3.7"/><path d="M13 2.6v3h-3"/></svg>换个说法</button></div>
+      <button type="button" class="fav-open" id="btnFavorites">
+        收藏她说的话　<b id="favBadge">0</b>
+      </button>
+
+      <div class="note-row note-row-mood">
+        <span class="note-k">心情</span>
+        <span id="moodChip" class="mood-chip" title="">—</span>
+      </div>
+
+      <div class="note-row">
+        <span class="note-k">手边</span>
+        <p id="lifeTask" class="note-v">—</p>
+      </div>
+
+      <div class="note-row">
+        <span class="note-k">心里</span>
+        <p id="lifeThought" class="note-v">—</p>
+      </div>
+
+      <div class="note-row note-row-soft">
+        <span class="note-k">小麻烦</span>
+        <p id="lifeTrouble" class="note-v note-v-soft">—</p>
+      </div>
+
+      <div class="note-row note-row-soft">
+        <span class="note-k">口味</span>
+        <p id="lifeTaste" class="note-v note-v-soft">—</p>
+      </div>
+    </div>
+
+    <!-- 最近记得（2026-11-05）：按强度取的三条 -->
+    <div class="card memtop">
+      <div class="life-title">最近记得</div>
+      <ul id="memTopList"><li class="memtop-empty">—</li></ul>
+    </div>
+
+
+
+        <!-- 折叠区一：她知道的（可以收起） -->
+    <details class="fold reveal">
+      <summary><span class="fold-name">她知道的</span><span class="fold-mark"></span></summary>
+      <div class="fold-body"><div class="fold-inner">
+        <div class="card world">
+          <div class="world-row"><span class="world-label">你的日子</span><span id="worldProgress" class="world-note"></span></div>
+          <div class="world-row"><span class="world-label">你们的旧事</span><span id="worldFarm" class="world-note"></span></div>
+          <div class="world-row"><span class="world-label">这些天的轮廓</span><span id="worldFriends" class="world-note"></span></div>
+          <div class="world-row"><span class="world-label">眼下</span><span id="worldShu" class="world-note"></span></div>
+        </div>
+      </div></div>
+    </details>
+
+    <!-- 用量：收进折叠（2026-11-10）—— 这是给调试看的，不该常驻 -->
+    <details class="fold">
+      <summary><span class="fold-name">用量</span><span class="fold-mark"></span></summary>
+      <div class="fold-body"><div class="fold-inner">
+        <div class="card">
+          <div class="world-row"><span class="world-label">今天用了</span><span id="usageLine" class="world-note"></span></div>
+        </div>
+      </div></div>
+    </details>
+
+    <!-- 他答应过的事。她记着，但绝不催 —— 见 mind_promise.py
+         常驻展开（2026-11-05）-->
+    <div class="open-block">
+      <div class="open-title">他答应过的事　<b id="promiseBadge">0</b></div>
+      <div class="card">
+        <div id="promiseList" class="promise-list"></div>
+      </div>
+    </div>
+
+    <!-- 折叠区二：设置 -->
+    <!-- 留白（2026-11-04）：设置收进图标后，面板底部空出一大块。
+         这里放一根会随高度伸缩的细线 —— 它不承载信息，
+         只是让空出来的地方看起来"是被留着的"，而不是"没做完"。 -->
+    <div class="panel-air" aria-hidden="true"><i></i></div>
+
+    <!-- 设置收进齿轮（2026-11-04）：面板底部只留一行小图标。
+       日记独立放出来 —— 它是"每天去看一眼"的东西，不该藏在设置里。 -->
+    <div class="panel-tools">
+      <a class="pt-item" href="/diary" target="_blank" title="她的日记">
+        <svg viewBox="0 0 20 20" aria-hidden="true">
+          <path d="M5 3.2h8.2a1.8 1.8 0 0 1 1.8 1.8v10.4a1.4 1.4 0 0 1-1.4 1.4H5.8A1.8 1.8 0 0 1 4 15V4.2A1 1 0 0 1 5 3.2z"/>
+          <path d="M7 6.6h5.4M7 9.4h5.4M7 12.2h3.4"/>
+        </svg>
+        <span>日记</span>
+      </a>
+      <button class="pt-item" id="settingsBtn" type="button" title="设置">
+        <svg viewBox="0 0 20 20" aria-hidden="true">
+          <circle cx="10" cy="10" r="2.6"/>
+          <path d="M10 2.6v1.8M10 15.6v1.8M2.6 10h1.8M15.6 10h1.8M4.8 4.8l1.3 1.3M13.9 13.9l1.3 1.3M15.2 4.8l-1.3 1.3M6.1 13.9l-1.3 1.3"/>
+        </svg>
+        <span>设置</span>
+      </button>
+    </div>
+
+<details class="fold settings-fold" id="settingsFold" open>
+      <summary><span class="fold-name">设置</span><span class="fold-mark"></span></summary>
+      <div class="fold-body"><div class="fold-inner">
+<div class="card settings">
+        <div class="life-title">配色</div>
+        <div class="theme-row" id="themeRow">
+          <button type="button" class="theme-btn" data-theme="light">宣纸</button>
+          <button type="button" class="theme-btn" data-theme="moon">月华</button>
+          <button type="button" class="theme-btn" data-theme="ink">墨夜</button>
+          <button type="button" class="theme-btn" data-theme="candle">烛火</button>
+        </div>
+
+        <!-- 「读哪个存档」「关系取自游戏」已删（2026-10-27）：
+             与游戏脱钩后这两个控件不再有任何作用，留着只会让人以为还有关系。 -->
+        <!-- 原来按钮塞在 <label> 里：文字被挤到换行，而且点按钮会顺手
+             把勾选框切掉。拆成一行两块（2026-10-27）。 -->
+        <div class="chk-row">
+          <label class="chk" title="切到一份独立的存档，调试用。真实对话与记忆不受影响。">
+            <input type="checkbox" id="useTestSession">
+            测试档（独立存档）
+          </label>
+          <button id="btnBaseline" class="tiny" title="把测试档恢复成基线（清掉对话轮次，保留她的阅历）">回到基线</button>
+        </div>
+
+        <div class="life-title mt">立绘</div>
+        <select id="portraitSource">
+          <option value="mod">mod 像素立绘（画风统一）</option>
+          <option value="official">官方高清脸（更清晰）</option>
+          <option value="her">社区mod 立绘（14 张表情）</option>
+        </select>
+
+        <div class="life-title mt">背景音乐</div>
+        <label class="chk">
+          <input type="checkbox" id="bgmOn">
+          播放
+        </label>
+        <select id="bgmTrack"></select>
+        <input type="range" id="bgmVol" min="0" max="100" value="35" title="音量">
+      </div>
+      </div></div>
+    </details>
+
+    <!-- 底栏（2026-11-04 重做）：和上面那行图标条用同一套语汇 ——
+         虚线分隔、幽灵按钮、统一的 15px 线条图标。
+         原来这里是一行纯文字 + 原生复选框，是整个面板里最"没做"的一块。 -->
+    <div class="panel-foot">
+      <button id="btnMemory" class="pf-btn" type="button" title="她记得什么">
+        <svg viewBox="0 0 20 20" aria-hidden="true">
+          <path d="M5.2 3.4h8.2a1.6 1.6 0 0 1 1.6 1.6v10a1.4 1.4 0 0 1-1.4 1.4H6a1.8 1.8 0 0 1-1.8-1.8V4.4a1 1 0 0 1 1-1z"/>
+          <path d="M7.2 7h5M7.2 9.8h5M7.2 12.6h3"/>
+        </svg>
+        <span>她的记忆</span>
+        <b id="memBadge">0</b>
+      </button>
+
+      <label class="pf-switch" title="勾上后整页模糊，方便给别人看">
+        <input type="checkbox" id="privacyMode">
+        <i class="pf-track" aria-hidden="true"><i class="pf-knob"></i></i>
+        <span>公众</span>
+      </label>
+    </div>
+  </aside>
+
+  <!-- 右：对话 -->
+  <main class="chat">
+    <header class="chat-head">
+      <span id="chatTitle">和她说话</span>
+      <span class="hint" id="hint"></span>
+    </header>
+
+    <div id="noteBox" class="note-box hidden"></div>
+      <div id="log" class="log"></div>
+
+    <footer class="composer">
+      <div class="composer-tools">
+        <button id="btnSpeak" class="tool" title="让她先开口（接着说也行）">让她开口</button>
+        <button id="btnImage" class="tool" title="给她看一张图（也可以直接粘贴或拖进来）">给她看图</button>
+        <input type="file" id="imgFile" accept="image/*" multiple hidden>
+      </div>
+      <!-- 待发送的图。空的时候由 JS 加 hidden -->
+      <div id="imgStrip" class="img-strip hidden"></div>
+      <div class="composer-row">
+        <textarea id="input" rows="1" placeholder="说点什么…（Enter 发送，Shift+Enter 换行，可粘贴图片）"></textarea>
+        <button id="send">说</button>
+      </div>
+    </footer>
+  </main>
+
+</div>
+
+<!-- 记忆面板 -->
+<!--
+  结构分成三段：头 / 可滚动的体 / 固定的尾。
+
+  ## 为什么要分（2026-10-17 修）
+
+  原来是一整块 `.gate-box.wide`，只给 `.mem-list` 设了 `overflow-y`。
+  但 `.mem-list` 没被 flex 约束（没写 flex:1，父容器也没限高），
+  于是列表按内容自然撑开 —— 面板越来越长，**关闭按钮被顶到屏幕外**，
+  而且没有任何地方能滚。
+
+  用户的原话：「这个界面缺少关闭键和滚动（太长了会从ui里跑出去）」
+
+  改法就是最稳的那种：**头尾固定，中间滚**。
+-->
+<div id="memPanel" class="gate hidden">
+  <div class="gate-box wide mem-box">
+    <h2>她记得的事</h2>
+    <p class="gate-note">
+      她确实记得这些 —— 不是编的。你可以随时删掉或改写。<br>
+      <b>事实</b>是她记住的关于你的事；<b>嘱咐</b>是你让她注意的事。
+    </p>
+
+    <!-- 只有这一层滚动。头（标题）和尾（关闭）都不滚 -->
+    <div class="mem-body">
+
+    <div class="mem-add">
+      <input id="memInput" type="text" placeholder="手动加一条，比如「我妹妹叫小满」" maxlength="200">
+      <select id="memKind">
+        <option value="fact">事实</option>
+        <option value="guidance">嘱咐</option>
+      </select>
+      <button id="memAdd">加上</button>
+    </div>
+
+    <div id="memList" class="mem-list"></div>
+
+    <!-- 只读的三块：她眼里的你 / 你答应过的事 / 统计。
+         原来面板只给看 memories 一种，于是「她是不是真记得」变成了猜。 -->
+    <div id="memReadonly" class="mem-readonly"></div>
+
+    <!-- 试召回：给一个词，看她能翻出哪些旧对话。
+         用来分辨「她忘了」和「召回的判据没匹配上」——
+         这两件事的修法完全不同，而从聊天里分不出来。 -->
+    <div class="mem-sec">试一次召回<span class="mem-sec-note">给个词，看她能翻出哪些旧对话</span></div>
+    <div class="mem-add">
+      <input id="recallInput" type="text" placeholder="比如「小满」，然后按回车" maxlength="40">
+      <button id="recallGo">翻翻</button>
+    </div>
+    <div id="recallOut" class="recall-out"></div>
+
+    <!-- 记忆快照 —— 能列出、能回滚。
+         起因：2026-10-16 误触「重新开始」丢了 134 轮对话，
+         靠一个孤零零的 .bak 才救回来。游戏存档早就有「多槽位 + 读档」，
+         记忆一直缺这一半。 -->
+    <div class="mem-sec">记忆快照<span class="mem-sec-note">可以回滚到之前的状态</span></div>
+    <div class="mem-add">
+      <button id="snapTake">给现在打一份</button>
+      <button id="snapRefresh">刷新</button>
+    </div>
+    <div id="snapOut" class="snap-out"></div>
+
+    </div><!-- /.mem-body 滚动区到此为止 -->
+
+    <!-- 固定在底部，不随内容滚走 -->
+    <div class="gate-actions mem-foot">
+      <span class="mem-foot-hint">Esc 也可以关</span>
+      <button id="memClose">关闭</button>
+    </div>
+  </div>
+</div>
+
+  <!-- 收藏框。注意：必须在 <script> 之前 ——
+       脚本一执行就绑定 favClose/favBox，晚了解析会拿到 null。 -->
+  <div id="favBox" class="fav-box hidden">
+    <div class="fav-panel">
+      <div class="fav-head">
+        <span>她说过的话</span>
+        <button type="button" id="favClose" class="fav-close">关闭</button>
+      </div>
+      <div id="favList" class="fav-list"></div>
+    </div>
+  </div>
+
+<!-- 语音：要在 app.js **之前** —— app.js 画气泡时调 Voice.attach。
+     不是 ES module，靠 window.Voice 通信，避加载顺序的坑。 -->
+<script src="/voice.js"></script>
+<script src="/rewind.js"></script>
+<script src="/app.js"></script>
+
+
+
+<!-- 演示 / 截图参数（2026-10-27）
+     ?privacy=1  直接进公众模式（整页模糊）
+     ?mem=1      直接弹出「她的记忆」
+     写在 HTML 里而不是 app.js 里 —— 它不依赖主流程有没有跑起来。 -->
+<script>
+  (function mind_demo() {
+    var q = location.search || '';
+    if (q.indexOf('privacy=1') >= 0) {
+      document.body.classList.add('privacy');
+      var box = document.getElementById('privacyMode');
+      if (box) box.checked = true;
+      // 统一走 app.js 里的 mindApplyPrivacy（内联样式，不依赖 CSS）
+      var tryApply = function () {
+        if (window.mindApplyPrivacy) window.mindApplyPrivacy(true);
+        else setTimeout(tryApply, 150);
+      };
+      tryApply();
+    }
+    if (q.indexOf('mem=1') >= 0) {
+      setTimeout(function () {
+        var m = document.getElementById('btnMemory');
+        if (m) m.click();
+      }, 1400);
+    }
+  })();
+</script>
+
+<!-- QQ 栏（2026-11-05）：从左侧面板里独立出来，效仿最右那栏。
+     宽屏时出现在界面左边，窄屏自动收起。 -->
+<aside id="qqRail" class="qq-rail" aria-label="QQ 状态">
+  <div class="qr-head">
+    <svg viewBox="0 0 20 20" aria-hidden="true">
+      <rect x="3.2" y="2.4" width="13.6" height="15.2" rx="2.4"/>
+      <path d="M7 18.4h6"/>
+      <path d="M10 5.2v5.2M7.6 8l2.4 2.4L12.4 8"/>
+    </svg>
+    <span>QQ</span>
+    <b id="qqBadge">—</b>
+  </div>
+
+  <div class="qr-block">
+    <div class="qr-row"><span class="qr-k">状态</span><span id="qqState" class="qr-v">—</span></div>
+    <div class="qr-row"><span class="qr-k">最近</span><span id="qqLast" class="qr-v">—</span></div>
+    <div class="qr-row"><span class="qr-k">一共</span><span id="qqCount" class="qr-v">—</span></div>
+    <div class="qr-row"><span class="qr-k">桥接</span><span id="qqBridge" class="qr-v">—</span></div>
+    <button class="qr-act" type="button" id="qqLinkBtn">接上 QQ</button>
+    <div class="qr-note" id="qqLinkNote">点一下，把她接到手机上</div>
+  </div>
+
+  <div class="qr-sep"></div>
+
+  <!-- 窗外的天（2026-11-10）-->
+  <div class="qr-block">
+    <div class="qr-cap">窗外</div>
+    <div class="wr-window" id="wrWindow" data-w="cloudy" data-t="day">
+      <svg viewBox="0 0 120 90" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+        <defs>
+          <linearGradient id="wrSky" x1="0" y1="0" x2="0" y2="1">
+            <stop class="wr-sky-1" offset="0"/>
+            <stop class="wr-sky-2" offset="1"/>
+          </linearGradient>
+          <radialGradient id="wrGlow">
+            <stop class="wr-glow-1" offset="0"/>
+            <stop class="wr-glow-2" offset="1"/>
+          </radialGradient>
+          <linearGradient id="wrWarm" x1="0" y1="1" x2="0" y2="0">
+            <stop class="wr-warm-1" offset="0"/>
+            <stop class="wr-warm-2" offset="1"/>
+          </linearGradient>
+          <filter id="wrSoft" x="-40%" y="-40%" width="180%" height="180%">
+            <feGaussianBlur stdDeviation="1.6"/>
+          </filter>
+        </defs>
+
+        <rect class="wr-sky" x="0" y="0" width="120" height="90" fill="url(#wrSky)"/>
+
+        <!-- 远山 -->
+        <path class="wr-hills" d="M0 62 L18 52 L34 60 L52 48 L72 58 L92 50 L120 60 L120 90 L0 90 Z"/>
+
+        <!-- 月亮 / 太阳 -->
+        <g class="wr-orb">
+          <circle class="wr-halo" cx="86" cy="24" r="15" fill="url(#wrGlow)"/>
+          <circle class="wr-disc" cx="86" cy="24" r="7"/>
+          <circle class="wr-crater" cx="83.6" cy="22.2" r="1.3"/>
+          <circle class="wr-crater" cx="88.4" cy="26" r="1"/>
+        </g>
+
+        <!-- 云：两层，速度不同 -->
+        <!-- 夜空星点（只在夜里出现）-->
+        <g class="wr-nightstars">
+          <circle cx="14" cy="12" r=".5"/><circle cx="28" cy="26" r=".4"/>
+          <circle cx="40" cy="8" r=".45"/><circle cx="52" cy="20" r=".4"/>
+          <circle cx="16" cy="34" r=".4"/><circle cx="34" cy="38" r=".35"/>
+          <circle cx="6" cy="22" r=".4"/><circle cx="46" cy="32" r=".35"/>
+        </g>
+
+        <g class="wr-clouds" filter="url(#wrSoft)">
+          <!-- 云：圆瓣 path（远小近大），再叠一层淡的做体积 -->
+          <g class="wr-cloud-far">
+            <path class="wr-cloud" d="M2 16 C0 11 5 6.5 10 7.5 C11 2.5 18 1 21.5 4.8
+                     C26.5 .6 35 3 35 8.6 C40.5 8.2 42 14.6 37.5 16 Z"
+                  transform="translate(8,4) scale(.72)"/>
+            <path class="wr-cloud wr-cloud-thin" d="M2 16 C0 11 5 6.5 10 7.5 C11 2.5 18 1 21.5 4.8
+                     C26.5 .6 35 3 35 8.6 C40.5 8.2 42 14.6 37.5 16 Z"
+                  transform="translate(52,2) scale(.5)"/>
+          </g>
+          <g class="wr-cloud-near">
+            <path class="wr-cloud" d="M2 16 C0 11 5 6.5 10 7.5 C11 2.5 18 1 21.5 4.8
+                     C26.5 .6 35 3 35 8.6 C40.5 8.2 42 14.6 37.5 16 Z"
+                  transform="translate(62,18) scale(.95)"/>
+            <path class="wr-cloud wr-cloud-thin" d="M2 16 C0 11 5 6.5 10 7.5 C11 2.5 18 1 21.5 4.8
+                     C26.5 .6 35 3 35 8.6 C40.5 8.2 42 14.6 37.5 16 Z"
+                  transform="translate(96,12) scale(.66)"/>
+          </g>
+        </g>
+
+        <!-- 树剪影 -->
+        <path class="wr-tree" d="M12 66 L12 46 M12 52 L6 47 M12 50 L18 45 M12 56 L5 52 M12 54 L19 50"/>
+        <path class="wr-tree" d="M104 66 L104 50 M104 55 L99 51 M104 53 L109 49"/>
+
+        <!-- 雨 -->
+        <g class="wr-rain">
+          <line x1="16" y1="4" x2="12" y2="26"/>
+          <line x1="32" y1="0" x2="28" y2="22"/>
+          <line x1="48" y1="6" x2="44" y2="28"/>
+          <line x1="64" y1="2" x2="60" y2="24"/>
+          <line x1="80" y1="8" x2="76" y2="30"/>
+          <line x1="96" y1="4" x2="92" y2="26"/>
+          <line x1="110" y1="10" x2="106" y2="32"/>
+          <line x1="24" y1="20" x2="20" y2="42"/>
+          <line x1="56" y1="24" x2="52" y2="46"/>
+          <line x1="88" y1="26" x2="84" y2="48"/>
+        </g>
+
+        <!-- 雪 -->
+        <g class="wr-snow">
+          <circle cx="20" cy="10" r="1.3"/><circle cx="42" cy="22" r="1.1"/>
+          <circle cx="64" cy="6" r="1.2"/><circle cx="88" cy="18" r="1.3"/>
+          <circle cx="106" cy="30" r="1.1"/><circle cx="30" cy="36" r="1.2"/>
+        </g>
+
+        <!-- 雾 -->
+        <rect class="wr-fog" x="0" y="0" width="120" height="90"/>
+
+        <!-- 夜里屋里透出的暖光 -->
+        <rect class="wr-warm" x="0" y="70" width="120" height="20" fill="url(#wrWarm)"/>
+
+        <!-- 玻璃反光 -->
+        <g class="wr-sheen">
+          <path d="M-20 96 L34 12 L52 12 L-2 96 Z"/>
+        </g>
+
+        <!-- 窗框 + 窗棂 -->
+        <line class="wr-mull-v" x1="60" y1="0" x2="60" y2="86"/>
+        <line class="wr-mull-h" x1="0" y1="42" x2="120" y2="42"/>
+        <rect class="wr-frame" x="0.5" y="0.5" width="119" height="85"/>
+        <line class="wr-sill" x1="0" y1="86" x2="120" y2="86"/>
+      </svg>
+    </div>
+    <div class="wr-note" id="wrNote">—</div>
+  </div>
+
+  <div class="qr-sep"></div>
+
+  <!-- 记忆星图（2026-11-10）-->
+  <div class="qr-block">
+    <div class="qr-cap">记得的事</div>
+    <svg id="wrStars" class="wr-stars" viewBox="0 0 120 150" aria-label="记忆星图"></svg>
+    <div class="wr-legend" id="wrLegend">
+      <button type="button" class="wr-lg" data-k="evt"><i class="s-evt"></i>事</button>
+      <button type="button" class="wr-lg" data-k="mem"><i class="s-mem"></i>记</button>
+      <button type="button" class="wr-lg" data-k="prom"><i class="s-prom"></i>约</button>
+    </div>
+    <div class="wr-star-info" id="wrStarInfo">点一颗星，看它是什么事</div>
+  </div>
+
+  <div class="qr-sep"></div>
+
+  <!-- 她手机上的内容（将来接上之后往这里填）-->
+  <div class="qr-block">
+    <div class="qr-cap">她的手机</div>
+    <ul id="qqFeed" class="qr-feed">
+      <li class="qr-empty">接上之后，她在 QQ 上的动静会出现在这里</li>
+    </ul>
+  </div>
+
+  <div class="qr-foot">
+    <span id="qqHint">127.0.0.1:8732</span>
+  </div>
+</aside>
+
+<!-- 大时针盘（2026-11-02）：浮在界面外的空白里，不走任何面板 -->
+<div id="bigClock" class="big-clock" title="按现实时间走">
+  <svg viewBox="0 0 160 160" aria-hidden="true">
+    <circle class="bc-glass" cx="80" cy="80" r="76"/>
+    <circle class="bc-ring" cx="80" cy="80" r="70"/>
+    <!-- 白天那一段（6:00 → 18:00）：一条淡金弧 -->
+    <circle class="bc-dayarc" cx="80" cy="80" r="61" transform="rotate(90 80 80)"/>
+    <g class="bc-ticks"></g>
+    <g class="bc-celestial">
+      <circle class="bc-orb" cx="80" cy="19" r="7"/>
+    </g>
+    <circle class="bc-hub" cx="80" cy="80" r="2"/>
+  </svg>
+  <div class="bc-text">
+    <b id="bcHM">--:--</b>
+    <span id="bcSeg"></span>
+    <span id="bcMore"></span>
+  </div>
+
+  <!-- 天气（2026-11-02）：数据来自 /api/status 的 days.weather（现实天气） -->
+  <div class="bc-weather">
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <g class="wx-sun">
+        <circle cx="12" cy="12" r="4.3"/>
+        <path d="M12 2.6v2.2M12 19.2v2.2M2.6 12h2.2M19.2 12h2.2
+                 M5.4 5.4l1.6 1.6M17 17l1.6 1.6M18.6 5.4L17 7M7 17l-1.6 1.6"/>
+      </g>
+      <g class="wx-cloud">
+        <path d="M7.4 17.5h9.2a3.4 3.4 0 0 0 .3-6.8 5 5 0 0 0-9.6 1.1 2.9 2.9 0 0 0 .1 5.7z"/>
+      </g>
+      <g class="wx-rain">
+        <path d="M12 16.6v3.4M16 16.6v3.4M8 16.6v3.4"/>
+      </g>
+      <g class="wx-snow">
+        <path d="M12 17v3.2M10.6 18.1l2.8 1M13.4 18.1l-2.8 1"/>
+      </g>
+    </svg>
+    <span id="bcWx">—</span>
+  </div>
+
+  <!-- 在一起第 N 天 + 她的状态条（2026-11-04）-->
+  <div class="rail-block">
+    <div class="rail-cap">在一起</div>
+    <div class="rail-days"><span id="railTogether">—</span><i>天</i></div>
+
+    <div class="rail-bar">
+      <span class="rail-k">心情</span>
+      <div class="rail-track"><div class="rail-fill" id="railValence"></div></div>
+    </div>
+    <div class="rail-bar">
+      <span class="rail-k">精力</span>
+      <div class="rail-track"><div class="rail-fill alt" id="railEnergy"></div></div>
+    </div>
+  </div>
+
+  <!-- 她最近一篇日记的第一句 -->
+  <div class="rail-diary">
+    <div class="rail-diary-h">她的日记</div>
+    <p id="railDiary">（还没有日记）</p>
+  </div>
+
+<!-- 她的家（2026-11-04，方案 D：两层带前院）
+     剖开画：二楼在上、一楼在中、院子在前。
+     她在哪儿由 /api/status 的 days.place 决定（模型判定，不是猜） -->
+    <div class="house-map" id="houseMap">
+      <div class="hm-head">
+        <span>她的家</span>
+        <b id="hmPlace">—</b>
+      </div>
+      <svg viewBox="0 0 240 190" id="hmSvg" aria-hidden="true">
+        <path class="hm-roof" d="M14 20 L226 20" />
+        <path class="hm-roof2" d="M14 20 L8 26 M226 20 L232 26" />
+
+        <rect class="hm-room" id="hm-bed" x="18" y="24" width="150" height="42" rx="2" />
+        <rect class="hm-room" id="hm-store" x="168" y="24" width="54" height="42" rx="2" />
+        <line class="hm-mid" x1="18" y1="66" x2="222" y2="66" />
+        <text class="hm-lb" x="26" y="50">卧房</text>
+        <text class="hm-lb" x="172" y="50">储物角</text>
+        <line class="hm-div" x1="168" y1="24" x2="168" y2="66" />
+
+        <rect class="hm-room" id="hm-1f" x="18" y="70" width="204" height="44" rx="2" />
+        <text class="hm-lb" x="26" y="98">厨房</text>
+        <text class="hm-lb" x="82" y="98">堂屋</text>
+        <text class="hm-lb sm" x="144" y="98">楼梯</text>
+        <text class="hm-lb sm" x="172" y="98">卫生间</text>
+        <line class="hm-div" x1="76" y1="70" x2="76" y2="114" />
+        <line class="hm-div" x1="140" y1="70" x2="140" y2="114" />
+        <line class="hm-div" x1="168" y1="70" x2="168" y2="114" />
+
+        <rect class="hm-room" id="hm-corridor" x="18" y="118" width="204" height="16" rx="2" />
+        <text class="hm-lb sm" x="24" y="130">后廊</text>
+
+        <rect class="hm-room yard" id="hm-yard" x="8" y="140" width="224" height="30" rx="3" />
+        <text class="hm-lb" x="16" y="160">院子</text>
+
+        <!-- 院门外（2026-11-05）：去镇上、下地、跟他出门时她在这儿 -->
+        <rect class="hm-room road" id="hm-outside" x="8" y="174" width="224" height="26" rx="3" />
+        <text class="hm-lb" x="16" y="191">外面</text>
+        <path class="hm-roadline" d="M120 174 L120 200" />
+
+        <circle class="hm-halo" id="hmHalo" cx="108" cy="92" r="9" />
+        <circle class="hm-dot" id="hmDot" cx="108" cy="92" r="3" />
+      </svg>
+    </div>
+  </div>
+
+    
+
+</body>
+</html>

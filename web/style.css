@@ -1,0 +1,3917 @@
+/* mind · 内在生活 —— 界面样式
+   色调取她的设定锚点：青碧天师袍 + 青玉法器 + 黄米金
+   背景纹理由 mod 自带图块集抽取、去色、平铺而成（见 make_bg_texture.py）
+
+   ── 主题 ────────────────────────────────────────────
+   四套配色，用 <html data-theme="…"> 切换：
+       light   宣纸      浅色（默认）—— 原配色
+       moon    月华      银灰蓝 + 柔白
+       ink     墨夜      深靛黑 + 冷蓝 + 金
+       candle  烛火      暖炭褐 + 琥珀金
+
+   深色三套都从她的设定取材，不是随便配的：
+       月华 贴她银白长发与月的气质
+       墨夜 是她龙尾冷蓝压到最暗
+       烛火 是「夜里守一盏灯」的暖意
+
+   新增主题时只改这一块即可 —— 下面所有规则都只引用变量。 */
+
+/* 浅色（默认） */
+:root {
+  --ink:        #2b2f2c;
+  --ink-soft:   #5a6660;
+  --paper:      #f4f1e8;
+  --paper-2:    #e9e4d6;
+  --line:       #d3cbb8;
+  --jade:       #6c9882;
+  --jade-dark:  #4a7062;
+  --gold:       #c9a961;
+  --gold-soft:  rgba(201, 169, 97, .38);
+  --mind-bubble: rgba(255, 255, 255, .72);   /* 半透明玻璃感 */
+  --me-bubble:  rgba(223, 233, 226, .72);
+  --bubble-edge: rgba(255, 255, 255, .5);
+
+  /* 从官方立绘取样得到的两个重点色 */
+  --mind-blue:   #3a5a8c;   /* 她龙尾与发梢的冷蓝 */
+  --mind-gold:   #907848;   /* 龙角与发丝的暗金 */
+
+  /* 页面底色与肌理浓度 */
+  --page:       #f2eee3;
+  --page-grad:  linear-gradient(170deg,
+                  #faf7ee 0%, #f3efe2 34%, #e8e9e2 62%, #dde3e4 100%);
+  --tex-paper:  .55;        /* 纸纹不透明度 */
+  --tex-water:  .5;         /* 水纹不透明度 */
+  --tex-blend:  multiply;   /* 肌理叠加方式 */
+  --tex-tint:   #968a6e;    /* 纸纹着色 */
+  --tex-paper-img: url("/bg/paper.png");
+  --tex-water-img: url("/bg/water.png");
+  --tex-blue:   #3c5a8c;    /* 水纹着色 */
+  --chat-veil:  rgba(250, 248, 242, .82);   /* 对话区薄纱 */
+  --shadow:     rgba(120, 105, 75, .07);
+  --glow:       none;
+}
+
+/* 月华 —— 银灰蓝 + 柔白 */
+:root[data-theme="moon"] {
+  --ink:        #e8ebf0;
+  --ink-soft:   #96a0af;
+  --paper:      #21262e;
+  --paper-2:    #21262e;
+  --line:       #363e4a;
+  --jade:       #7fa3c8;
+  --jade-dark:  #a8bed6;
+  --gold:       #a8bed6;
+  --gold-soft:  rgba(168, 190, 214, .32);
+  --mind-bubble: rgba(41, 47, 57, .58);
+  --me-bubble:  rgba(46, 58, 72, .58);
+  --bubble-edge: rgba(168, 190, 214, .18);
+
+  --mind-blue:   #6084b2;
+  --mind-gold:   #a8bed6;
+
+  --page:       #161a20;
+  --page-grad:  linear-gradient(170deg,
+                  #1c222a 0%, #171b21 40%, #12161b 70%, #0e1116 100%);
+  --tex-paper:  .30;
+  --tex-water:  .42;
+  --tex-blend:  normal;
+  --tex-paper-img: url("/bg/paper_dark.png");
+  --tex-water-img: url("/bg/water_dark.png");
+  --tex-tint:   #6d7d92;
+  --tex-blue:   #4d6f9e;
+  --chat-veil:  rgba(24, 29, 36, .55);
+  --shadow:     rgba(0, 0, 0, .45);
+  --glow:       0 0 14px rgba(168, 190, 214, .12);
+}
+
+/* 墨夜 —— 深靛黑 + 冷蓝 + 金 */
+:root[data-theme="ink"] {
+  --ink:        #dee0e6;
+  --ink-soft:   #8a94a6;
+  --paper:      #1a1f2b;
+  --paper-2:    #1a1f2b;
+  --line:       #2c3444;
+  --jade:       #5b7fae;
+  --jade-dark:  #7d9fce;
+  --gold:       #c9a961;
+  --gold-soft:  rgba(201, 169, 97, .34);
+  --mind-bubble: rgba(33, 39, 53, .60);
+  --me-bubble:  rgba(37, 50, 63, .60);
+  --bubble-edge: rgba(201, 169, 97, .16);
+
+  --mind-blue:   #3a5a8c;
+  --mind-gold:   #c9a961;
+
+  --page:       #10131c;
+  --page-grad:  linear-gradient(170deg,
+                  #141826 0%, #111520 40%, #0d1017 70%, #0a0c12 100%);
+  --tex-paper:  .26;
+  --tex-water:  .40;
+  --tex-blend:  normal;
+  --tex-paper-img: url("/bg/paper_dark.png");
+  --tex-water-img: url("/bg/water_dark.png");
+  --tex-tint:   #5a6480;
+  --tex-blue:   #3a5a8c;
+  --chat-veil:  rgba(16, 19, 28, .58);
+  --shadow:     rgba(0, 0, 0, .5);
+  --glow:       0 0 14px rgba(201, 169, 97, .10);
+}
+
+/* 烛火 —— 暖炭褐 + 琥珀金 */
+:root[data-theme="candle"] {
+  --ink:        #ebe0d0;
+  --ink-soft:   #9c8a74;
+  --paper:      #241e19;
+  --paper-2:    #241e19;
+  --line:       #3a3026;
+  --jade:       #b08a54;
+  --jade-dark:  #d4a054;
+  --gold:       #d4a054;
+  --gold-soft:  rgba(212, 160, 84, .34);
+  --mind-bubble: rgba(44, 36, 29, .58);
+  --me-bubble:  rgba(56, 44, 32, .58);
+  --bubble-edge: rgba(212, 160, 84, .16);
+
+  --mind-blue:   #8c7050;
+  --mind-gold:   #d4a054;
+
+  --page:       #181411;
+  --page-grad:  linear-gradient(170deg,
+                  #201a15 0%, #1b1612 40%, #15110e 70%, #100d0b 100%);
+  --tex-paper:  .28;
+  --tex-water:  .34;
+  --tex-blend:  normal;
+  --tex-paper-img: url("/bg/paper_dark.png");
+  --tex-water-img: url("/bg/water_dark.png");
+  --tex-tint:   #8a6f52;
+  --tex-blue:   #7a6242;
+  --chat-veil:  rgba(24, 20, 17, .58);
+  --shadow:     rgba(0, 0, 0, .5);
+  --glow:       0 0 14px rgba(212, 160, 84, .10);
+}
+
+/* ── 左栏 ───────────────────────────────────────────── */
+
+/* ── 配色切换 ─────────────────────────────────────────
+   四套主题，点一下即时生效并记进配置。 */
+.theme-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.theme-btn {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 5px 8px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: color-mix(in srgb, var(--paper) 45%, transparent);
+  color: var(--ink-soft);
+  font-family: inherit;
+  font-size: 12px;
+  cursor: pointer;
+  transition: border-color .15s, color .15s, background .15s;
+}
+.theme-btn:hover { border-color: var(--gold); color: var(--ink); }
+.theme-btn.on {
+  border-color: var(--gold);
+  color: var(--ink);
+  background: var(--gold-soft);
+}
+
+/* 深色下原生的下拉箭头/勾选框需要跟着变，否则看不清 */
+:root[data-theme="moon"], :root[data-theme="ink"], :root[data-theme="candle"] {
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  color: var(--ink);
+  font-family: "Songti SC", "SimSun", "Noto Serif CJK SC", serif;
+  font-size: 15px;
+}
+
+/* ── 背景装饰 ─────────────────────────────────────────
+   分三层，从下到上：
+
+     1. 暖纸底色 + 一层手绘感渐变（上暖下凉，呼应她的金→蓝）
+     2. 米色宣纸肌理（取自 mod 的素色墙块，去色后平铺）
+     3. 蓝色水纹（取自 mod 的水面块，只留波纹线条，覆盖率约 3%）
+
+   水纹刻意铺得很淡 —— 它是肌理，不是图案。
+   用 mod 图块而不是另找素材，是为了和立绘保持同一画风。 */
+html {
+  background-color: var(--page);
+  background-image:
+    /* 3. 水纹（着色版，见 make_bg_texture.py） */
+    url("/bg/water.png"),
+    /* 2. 宣纸肌理 */
+    url("/bg/paper.png"),
+    /* 1. 色彩渐变 */
+    var(--page-grad);
+  background-repeat: repeat, repeat, no-repeat;
+  background-size: 400px 300px, 200px 200px, cover;
+  background-attachment: fixed;
+  color: var(--ink);
+}
+
+/* 肌理层：单独铺一层，浓度与着色随主题变。
+   这样三套深色主题共用同一对 PNG，不必重新生成三套纹理。 */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: var(--tex-water-img), var(--tex-paper-img);
+  background-repeat: repeat, repeat;
+  background-size: 400px 300px, 200px 200px;
+  opacity: var(--tex-water);
+  /* 深色下用 screen 提亮肌理、浅色下用 multiply 压暗 */
+  mix-blend-mode: var(--tex-blend);
+}
+
+/* 顶部柔光 + 天地头色带。
+   深色下它是「月色/烛光从上洒下来」，浅色下是纸的白。 */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image:
+    radial-gradient(ellipse at 50% -10%,
+      rgba(255, 255, 255, .55) 0%, rgba(255, 255, 255, 0) 55%),
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--tex-blue) 22%, transparent) 0%, transparent 72px),
+    linear-gradient(0deg,
+      color-mix(in srgb, var(--tex-blue) 22%, transparent) 0%, transparent 72px);
+  opacity: .22;
+}
+
+.wrap {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  height: 100vh;
+  max-width: 1100px;
+  margin: 0 auto;
+  border-left: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+  box-shadow: 0 0 40px var(--shadow);
+}
+
+/* ── 节令纹样 ─────────────────────────────────────────
+   取自她的设定元素：稻穗（名「她」即粮食）、玉琮（她的法器）、龙角（白龙原型）。
+   刻意做得很淡 —— 是背景纹样，不是贴纸。 */
+.season-mark {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--line);
+  margin-bottom: 2px;
+  /* 同样禁止 flex 压缩，否则左栏挤的时候纹样会被裁掉 */
+  flex: 0 0 auto;
+}
+.season-mark .ornament {
+  /* 原来只有 110×20，缩小后三个图形糊成几道笔画认不出来。
+     实测放大后（并加密笔画）才读得出是稻穗、玉琮、龙角。 */
+  width: 96px;
+  height: 34px;
+  overflow: visible;
+  flex: 0 0 auto;
+}
+.season-mark .ornament path,
+.season-mark .ornament rect,
+.season-mark .ornament circle {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+/* 稻穗用稻色，玉琮用青玉，龙角用淡金 —— 各自对应她在设定里的意象 */
+.season-mark .orn-rice  { color: #c2a960; }
+.season-mark .orn-jade  { color: #6c9882; }
+.season-mark .orn-horn  { color: #cbb377; }
+.season-mark #seasonText {
+  font-size: 12px;
+  letter-spacing: 2px;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+
+/* 让节令纹样随季节换色调 */
+.season-mark[data-season="spring"] { color: #9fb98a; }
+.season-mark[data-season="summer"] { color: #7fa08c; }
+.season-mark[data-season="fall"]   { color: #c9a468; }
+.season-mark[data-season="winter"] { color: #a9b4bd; }
+
+/* ── 卡片：柔和阴影 + 角饰 ───────────────────────────
+   原来每个区块都是同一种硬边框，没有主次。
+   现在：去掉硬边框，改用极淡阴影；四角加细直角纹（取自玉琮的方圆形制）。 */
+.card,
+.life, .world, .settings {
+  position: relative;
+  /* 用实色（带一点透明度），**不要加 backdrop-filter** ——
+     实测：卡片加了 backdrop-filter: blur() 之后，深色主题下会变成
+     一块浅灰（RGB≈(151,154,159)），与面板底色 (26,31,43) 差 6 倍亮度，
+     字都看不清。模糊合成会把下层搅成一层浅雾，深色主题下尤其明显。 */
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  border: none;
+  border-radius: 6px;
+  padding: 12px 14px;
+  box-shadow:
+    0 1px 2px var(--shadow),
+    0 3px 10px var(--shadow);
+}
+
+/* 角饰：用两组渐变画出四个内折的直角 */
+.card::before,
+.life::before, .world::before, .settings::before {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  pointer-events: none;
+  border-radius: 3px;
+  background:
+    /* 左上 */
+    linear-gradient(var(--gold-soft), var(--gold-soft)) 0 0 / 9px 1px no-repeat,
+    linear-gradient(var(--gold-soft), var(--gold-soft)) 0 0 / 1px 9px no-repeat,
+    /* 右上 */
+    linear-gradient(var(--gold-soft), var(--gold-soft)) 100% 0 / 9px 1px no-repeat,
+    linear-gradient(var(--gold-soft), var(--gold-soft)) 100% 0 / 1px 9px no-repeat,
+    /* 左下 */
+    linear-gradient(var(--gold-soft), var(--gold-soft)) 0 100% / 9px 1px no-repeat,
+    linear-gradient(var(--gold-soft), var(--gold-soft)) 0 100% / 1px 9px no-repeat,
+    /* 右下 */
+    linear-gradient(var(--gold-soft), var(--gold-soft)) 100% 100% / 9px 1px no-repeat,
+    linear-gradient(var(--gold-soft), var(--gold-soft)) 100% 100% / 1px 9px no-repeat;
+}
+
+/* ── 折叠区 ───────────────────────────────────────────
+   左栏内容比视口高，所以把次要信息做成可折叠。
+   默认展开（一打开就能看到全部），需要时收起。 */
+.fold {
+  border: none;
+  margin: 0;
+}
+.fold > summary {
+  list-style: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 3px 2px 7px;
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: var(--ink-soft);
+  user-select: none;
+}
+.fold > summary::-webkit-details-marker { display: none; }
+.fold-name { font-weight: normal; }
+/* 折叠标记：一个会转的小三角 */
+.fold-mark {
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 5px solid var(--gold);
+  transition: transform .18s ease;
+}
+.fold:not([open]) .fold-mark { transform: rotate(-90deg); }
+.fold[open] > summary { color: var(--jade-dark); }
+.panel {
+  width: 300px;
+  flex: 0 0 300px;
+  padding: 20px 18px;
+  background: var(--paper-2);
+  border-right: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  /* 左栏内容比视口高时自己滚动。
+     原来没有这条 —— 加了节令纹样与 BGM 控件后内容变高，
+     flex 就把立绘框压扁了（实测：192px 被压到约 90px，
+     而 overflow:hidden 把它裁成扁长方形，脸完全看不出）。
+     修法有两层：这里允许滚动，下面给立绘框禁止收缩。 */
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.portrait-frame {
+  /* 从 192 缩到 160 —— 左栏里立绘偏大，压得下方信息没什么余地 */
+  width: 200px;
+  height: 200px;
+  /* 关键：禁止 flex 压缩。
+     否则左栏空间不够时，flex 会把这个方块压扁，
+     里面的图被 overflow:hidden 裁成扁的 —— 脸就糊了。 */
+  flex: 0 0 auto;
+  margin: 0 auto;
+  border: 2px solid var(--jade-dark);
+  border-radius: 4px;
+  background:
+    repeating-linear-gradient(45deg, #e2dccb 0 6px, #dcd5c2 6px 12px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  box-shadow: inset 0 0 0 3px var(--paper-2);
+}
+.portrait-frame img {
+  width: 200px;
+  height: 200px;
+  /* 锁住宽高比，避免任何情况下被拉变形 */
+  aspect-ratio: 1 / 1;
+  object-fit: contain;
+  /* 2026-11-04：原来写的是 pixelated。素材是 384px 的写实画风，
+     缩小到 200px 时最近邻会丢像素、边缘发毛，再叠加呼吸的 scale
+     就一路在闪 —— 看起来就是"糊"。写实画该让浏览器平滑采样。 */
+  image-rendering: auto;
+  transition: opacity .25s ease;
+  animation: breathe 4.5s ease-in-out infinite;
+}
+.portrait-frame img.swap { opacity: .3; }
+
+/* 轻微呼吸感 —— 让立绘不像一张贴图 */
+@keyframes breathe {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-2px) scale(1.012); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .portrait-frame img { animation: none; }
+  .typing i { animation: none; }
+}
+
+.name-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 10px;
+}
+.name { font-size: 26px; letter-spacing: 4px; }
+.stage {
+  font-size: 12px;
+  color: var(--jade-dark);
+  border: 1px solid var(--jade);
+  border-radius: 10px;
+  padding: 1px 8px;
+}
+
+.affection { padding: 0 4px; }
+.bar {
+  height: 6px;
+  background: #d8d2c2;
+  border-radius: 3px;
+  overflow: hidden;
+}
+.bar-fill {
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, var(--jade), var(--gold));
+  transition: width .5s ease;
+}
+.bar-label {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--ink-soft);
+  margin-top: 5px;
+}
+
+.life {
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 10px 12px;
+  font-size: 13px;
+  line-height: 1.7;
+}
+.life-title {
+  font-size: 11px;
+  letter-spacing: 2px;
+  color: var(--ink-soft);
+  margin-bottom: 6px;
+}
+.life-item { display: flex; gap: 8px; margin-top: 4px; }
+.life-item .k {
+  flex: 0 0 30px;
+  color: var(--jade-dark);
+  font-size: 12px;
+}
+
+/* 三层记忆的加载状态 */
+.world {
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 10px 12px;
+  font-size: 12px;
+  line-height: 1.9;
+}
+.world-row { display: flex; align-items: center; gap: 7px; }
+.world-sub {
+  display: block;
+  padding-left: 17px;
+  font-size: 11px;
+  color: var(--ink-soft);
+}
+.world-sub:empty { display: none; }
+.world-note { color: var(--jade-dark); font-size: 11px; }
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #c9c3b3;
+  flex: 0 0 7px;
+}
+.dot.on { background: var(--jade); box-shadow: 0 0 0 2px rgba(108,152,130,.22); }
+
+/* 存档选择与关系设置 */
+.settings {
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 10px 12px;
+  font-size: 12px;
+}
+.settings select {
+  width: 100%;
+  padding: 5px 6px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 12px;
+  color: var(--ink);
+  background: color-mix(in srgb, var(--paper) 55%, transparent);
+  margin-bottom: 8px;
+}
+.settings select:focus { outline: none; border-color: var(--jade); }
+.chk {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--ink-soft);
+  line-height: 1.5;
+  cursor: pointer;
+}
+.chk input { margin-top: 2px; flex: 0 0 auto; }
+
+/* 设置区内的小标题（与上方控件拉开距离） */
+.settings .mt { margin-top: 10px; }
+
+/* 音量滑块 */
+#bgmVol {
+  width: 100%;
+  margin-top: 6px;
+  accent-color: var(--jade-dark);
+  height: 14px;
+}
+#bgmTrack { margin-bottom: 6px; }
+
+.panel-foot {
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+  color: var(--ink-soft);
+}
+.link {
+  background: none;
+  border: none;
+  color: var(--ink-soft);
+  font-size: 11px;
+  text-decoration: underline;
+  cursor: pointer;
+  font-family: inherit;
+  padding: 0;
+}
+.link:hover { color: #a44; }
+
+/* ── 右栏 ───────────────────────────────────────────── */
+.chat {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  /* 对话区薄纱：让背景肌理隐约透出，又不影响看字。
+     浓度随主题变（深色下要压得更实才不晃眼）。 */
+  background: var(--chat-veil);
+}
+
+.chat-head {
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  background: var(--paper);
+}
+.chat-head .hint { font-size: 11px; color: var(--ink-soft); }
+
+.log {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  scroll-behavior: smooth;
+}
+
+/* ── 消息：微信式（头像 + 气泡 + 尖角）─────────────────
+   她的头像在左、你的在右，气泡贴着各自那一侧。 */
+
+.msg {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  max-width: 100%;
+}
+.msg.me {
+  flex-direction: row-reverse;   /* 自己的消息整条镜像 */
+}
+
+/* 头像：**无框**，直接出现在对话里。
+   去掉圆形、描边与底色，让素材自带的透明自然融进背景。
+
+   居中性：用 align-items/justify-content 双居中。
+   两个素材宽高比不同（她 1:1，玩家 39:33≈1.18:1），
+   之前写 align-items:flex-end 是让底边对齐，视觉重心反而偏了。
+
+   尺寸：**不要让 CSS 缩放玩家头像** —— 它的源图是整数倍放大的，
+   若容器写死宽高，浏览器会把它压成非整数倍，像素块宽度就不齐了。
+   所以用固定高度 + width:auto，按原生比例显示。 */
+.msg .avatar {
+  flex: 0 0 auto;
+  height: 48px;
+  min-width: 48px;
+  display: flex;
+  align-items: center;       /* 垂直居中 */
+  justify-content: center;   /* 水平居中 */
+  background: none;
+  border: none;
+  box-shadow: none;
+  overflow: visible;
+}
+.msg .avatar img {
+  height: 48px;
+  width: auto;               /* 不拉伸，按原比例 */
+  max-width: none;
+  display: block;
+  image-rendering: pixelated;
+  object-position: center;
+}
+
+/* 气泡与本体的容器 */
+.msg .stack {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  max-width: 72%;
+}
+.msg.me .stack { align-items: flex-end; }
+
+.bubble {
+  position: relative;
+  padding: 10px 14px;
+  border-radius: 10px;
+  line-height: 1.75;
+  white-space: pre-wrap;
+  word-break: break-word;
+  /* 半透明玻璃感：背景透出底下的肌理，加一层模糊与细边。
+     深色主题下这层尤其重要 —— 否则气泡是块死板的实心色。 */
+  backdrop-filter: blur(9px) saturate(1.15);
+  -webkit-backdrop-filter: blur(9px) saturate(1.15);
+  border: 1px solid var(--bubble-edge);
+  box-shadow: 0 1px 3px var(--shadow), var(--glow);
+}
+.bubble.shu {
+  background: var(--mind-bubble);
+  border-top-left-radius: 3px;   /* 贴头像那一角收窄，做出尖角感 */
+}
+.bubble.me {
+  background: var(--me-bubble);
+  border-top-right-radius: 3px;
+}
+
+/* 气泡尖角：一个小三角指向头像 */
+.bubble::before {
+  content: "";
+  position: absolute;
+  top: 12px;
+  width: 0;
+  height: 0;
+  border: 5px solid transparent;
+}
+.bubble.shu::before {
+  left: -9px;
+  border-right-color: var(--mind-bubble);
+}
+.bubble.me::before {
+  right: -9px;
+  border-left-color: var(--me-bubble);
+}
+
+/* 名字与时间放在气泡外侧，更接近聊天软件的习惯 */
+.msg .who {
+  font-size: 11px;
+  color: var(--ink-soft);
+  margin-bottom: 3px;
+  padding: 0 2px;
+}
+.msg .time {
+  font-size: 10px;
+  color: #a8a396;
+  margin-top: 3px;
+  padding: 0 2px;
+}
+
+/* 正在输入 */
+.bubble .typing {
+  display: inline-flex;
+  gap: 4px;
+  align-items: center;
+  height: 20px;
+}
+.bubble .typing i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--jade);
+  animation: blink 1.3s infinite;
+}
+.bubble .typing i:nth-child(2) { animation-delay: .18s; }
+.bubble .typing i:nth-child(3) { animation-delay: .36s; }
+@keyframes blink {
+  0%, 60%, 100% { opacity: .25; transform: translateY(0); }
+  30%           { opacity: 1;   transform: translateY(-3px); }
+}
+/* 旧的 .bubble.shu / .bubble.me / .bubble .who / .bubble .time 规则已删除 ——
+   改微信式布局后，对齐由 .msg 负责、名字与时间移到气泡外侧（见上方 .msg .who/.time）。
+   留着会和新规则打架。 */
+
+.sys {
+  align-self: center;
+  font-size: 12px;
+  color: var(--ink-soft);
+  background: rgba(0,0,0,.03);
+  border-radius: 10px;
+  padding: 3px 12px;
+}
+.sys.warn { color: #8a6d1f; background: rgba(214,178,92,.18); }
+.sys.err  { color: #8a2f2f; background: rgba(180,60,60,.12); }
+
+/* 正在逐字显示时，右侧留一条细光标 */
+.typing-text::after {
+  content: '';
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  margin-left: 2px;
+  background: var(--jade);
+  vertical-align: text-bottom;
+  animation: caret .9s steps(1) infinite;
+}
+@keyframes caret { 0%,50% { opacity: 1 } 50.01%,100% { opacity: 0 } }
+
+.bubble.streaming {
+  box-shadow: 0 0 0 1.5px var(--jade), 0 1px 3px rgba(120,105,75,.09);
+  /* 打字机逐字填充时，气泡会从小方块突然撑开，很跳。
+     给个最小宽度，让它在打字期间保持一个自然的体量。 */
+  min-width: 108px;
+}
+
+/* 双击复制的提示 */
+.flash {
+  color: #fff;
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(108,152,130,.9);
+  color: var(--page);
+  font-size: 12px;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
+/* 日期分隔（含游戏进度） */
+.day-divider {
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 11px;
+  color: #9aa39c;
+  margin: 6px 0;
+}
+.day-divider::before,
+.day-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+.day-divider .game-progress {
+  color: var(--jade-dark);
+  font-size: 11px;
+}
+
+/* ── 记忆面板 ───────────────────────────────────────── */
+.gate-box.wide { width: 620px; max-height: 82vh; display: flex; flex-direction: column; }
+
+.mem-add {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 14px;
+}
+.mem-add input {
+  flex: 1;
+  padding: 8px 10px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 14px;
+  background: color-mix(in srgb, var(--paper) 55%, transparent);
+}
+.mem-add input:focus { outline: none; border-color: var(--jade); }
+.mem-add select {
+  padding: 8px 6px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 13px;
+  background: color-mix(in srgb, var(--paper) 55%, transparent);
+}
+.mem-add button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  background: var(--jade-dark);
+  color: var(--page);
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+.mem-add button:hover { background: var(--jade); }
+
+.mem-list {
+  flex: 1;
+  overflow-y: auto;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--paper) 55%, transparent);
+  min-height: 120px;
+}
+.mem-empty {
+  padding: 26px 16px;
+  text-align: center;
+  color: var(--ink-soft);
+  font-size: 13px;
+  line-height: 1.9;
+}
+
+.mem-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-bottom: 1px solid #f0ece1;
+  font-size: 13px;
+}
+.mem-item:last-child { border-bottom: none; }
+.mem-item.guidance { background: rgba(214,178,92,.07); }
+
+.mem-tag {
+  flex: 0 0 auto;
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 8px;
+  background: var(--jade);
+  color: var(--page);
+}
+.mem-item.guidance .mem-tag { background: var(--gold); color: #4a3c12; }
+
+.mem-text { flex: 1; line-height: 1.6; word-break: break-word; }
+.mem-when { flex: 0 0 auto; font-size: 10px; color: #aaa; }
+
+.mem-btn {
+  flex: 0 0 auto;
+  padding: 2px 9px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--ink-soft);
+  font-family: inherit;
+  font-size: 11px;
+  cursor: pointer;
+}
+.mem-btn:hover { border-color: var(--jade); color: var(--jade-dark); }
+.mem-btn.danger:hover { border-color: #c66; color: #a33; }
+
+.link-strong {
+  background: none;
+  border: none;
+  color: var(--jade-dark);
+  font-family: inherit;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 0;
+}
+.link-strong:hover { text-decoration: underline; }
+#memBadge {
+  display: inline-block;
+  min-width: 16px;
+  padding: 0 4px;
+  border-radius: 8px;
+  background: var(--jade);
+  color: var(--page);
+  font-size: 10px;
+  text-align: center;
+}
+
+.typing { display: inline-flex; gap: 4px; }
+.typing i {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--jade);
+  animation: blink 1.2s infinite;
+}
+.typing i:nth-child(2) { animation-delay: .2s; }
+.typing i:nth-child(3) { animation-delay: .4s; }
+@keyframes blink { 0%,60%,100% { opacity:.25 } 30% { opacity:1 } }
+
+/* ── 输入区 ─────────────────────────────────────────── */
+.composer {
+  border-top: 1px solid var(--line);
+  padding: 10px 16px 12px;
+  background: var(--paper);
+}
+.composer-tools {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 9px;
+}
+.tool {
+  padding: 4px 13px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: transparent;
+  color: var(--ink-soft);
+  font-family: inherit;
+  font-size: 12px;
+  cursor: pointer;
+  transition: border-color .15s, color .15s;
+}
+.tool:hover:not(:disabled) { border-color: var(--jade); color: var(--jade-dark); }
+.tool:disabled { opacity: .45; cursor: default; }
+
+.composer-row {
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+}
+#input {
+  flex: 1;
+  resize: none;
+  max-height: 140px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 15px;
+  line-height: 1.6;
+  background: color-mix(in srgb, var(--paper) 78%, transparent);
+  color: var(--ink);
+}
+#input:focus { outline: none; border-color: var(--jade); }
+#send {
+  padding: 10px 20px;
+  border: none;
+  border-radius: 6px;
+  background: var(--jade-dark);
+  color: var(--page);
+  font-family: inherit;
+  font-size: 15px;
+  cursor: pointer;
+  transition: background .15s;
+}
+#send:hover:not(:disabled) { background: var(--jade); }
+#send:disabled { opacity: .5; cursor: default; }
+
+/* ── 密钥遮罩 ───────────────────────────────────────── */
+.gate {
+  position: fixed;
+  inset: 0;
+  background: rgba(43,47,44,.55);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+.gate.hidden, .hidden { display: none !important; }
+.gate-box {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 26px 28px;
+  width: 460px;
+  box-shadow: 0 10px 40px rgba(0,0,0,.25);
+}
+.gate-box h2 { margin: 0 0 12px; font-size: 19px; letter-spacing: 1px; }
+.gate-note { font-size: 13px; line-height: 1.8; color: var(--ink-soft); margin: 0 0 16px; }
+.gate-note code {
+  background: rgba(0,0,0,.06);
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-size: 12px;
+}
+.gate-box input {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  font-family: monospace;
+  font-size: 14px;
+  margin-bottom: 12px;
+}
+.gate-box input:focus { outline: none; border-color: var(--jade); }
+.gate-actions { display: flex; justify-content: flex-end; }
+.gate-actions button {
+  padding: 9px 20px;
+  border: none;
+  border-radius: 6px;
+  background: var(--jade-dark);
+  color: var(--page);
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+}
+.gate-actions button:hover { background: var(--jade); }
+.gate-error { color: #8a2f2f; font-size: 12px; margin-top: 10px; min-height: 16px; }
+
+/* ── 心情标签 ─────────────────────────────────────────
+   显示在「她此刻」下面。刻意**不做进度条** ——
+   那样太像数值系统，会出戏。心情该让人觉得是她今天的状态，
+   而不是一个可以刷的条。 */
+.mood-chip {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: 9px;
+  font-size: 11px;
+  line-height: 1.6;
+  border: 1px solid var(--line);
+  color: var(--ink-soft);
+  background: color-mix(in srgb, var(--paper) 40%, transparent);
+  cursor: help;
+  transition: border-color .2s, color .2s;
+}
+.mood-chip.bright {           /* 兴致好 */
+  color: var(--gold);
+  border-color: var(--gold-soft);  background: var(--gold-soft);
+}
+.mood-chip.dull {             /* 有些闷 */
+  color: var(--ink-soft);
+  border-color: var(--line);
+  opacity: .85;
+}
+.mood-chip.low {              /* 懒懒的 —— 冷色一档 */
+  color: var(--mind-blue);
+  border-color: color-mix(in srgb, var(--mind-blue) 40%, transparent);
+}
+.mood-chip.dim {              /* 提不起劲 —— 最沉的一档 */
+  color: var(--ink-soft);
+  border-color: var(--line);
+  opacity: .6;
+}
+
+/* ── 收藏 ─────────────────────────────────────────────
+   星号平时几乎看不见，鼠标移到那一条消息上才显形 ——
+   不干扰阅读，但想收藏时一伸手就够得到。 */
+.fav-btn {
+  align-self: flex-start;
+  margin: 2px 0 0 6px;
+  padding: 0 3px;
+  border: none;
+  background: none;
+  color: var(--line);
+  font-size: 13px;
+  line-height: 1;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity .18s, color .18s, transform .15s;
+}
+.msg:hover .fav-btn { opacity: .55; }
+.fav-btn:hover { opacity: 1; color: var(--gold); }
+.fav-btn.on {
+  opacity: 1;
+  color: var(--gold);
+  text-shadow: 0 0 6px var(--gold-soft);
+}
+/* 你的消息旁边不放星号 */
+.msg.me .fav-btn { display: none; }
+
+.fav-open {
+  display: block;
+  width: 100%;
+  margin: 2px 0 6px;
+  padding: 4px 8px;
+  border: 1px dashed var(--line);
+  border-radius: 4px;
+  background: none;
+  color: var(--ink-soft);
+  font-family: inherit;
+  font-size: 11px;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color .15s, color .15s;
+}
+.fav-open:hover { border-color: var(--gold); color: var(--ink); }
+.fav-open b { color: var(--gold); font-weight: 600; }
+
+/* 收藏框 */
+.fav-box {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, var(--page) 72%, transparent);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+}
+.fav-panel {
+  width: min(560px, 88vw);
+  max-height: 76vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  box-shadow: 0 8px 40px var(--shadow);
+  overflow: hidden;
+}
+.fav-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--line);
+  color: var(--ink);
+  font-size: 13px;
+  letter-spacing: 1px;
+}
+.fav-close {
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: none;
+  color: var(--ink-soft);
+  font-family: inherit;
+  font-size: 11px;
+  padding: 3px 10px;
+  cursor: pointer;
+}
+.fav-close:hover { border-color: var(--gold); color: var(--ink); }
+.fav-list { overflow-y: auto; padding: 6px 12px 14px; }
+.fav-empty {
+  padding: 40px 10px;
+  text-align: center;
+  color: var(--ink-soft);
+  font-size: 12px;
+  line-height: 2;
+}
+.fav-card {
+  position: relative;
+  margin-top: 12px;
+  padding: 12px 14px;
+  border-left: 2px solid var(--gold-soft);
+  background: color-mix(in srgb, var(--page) 60%, transparent);
+  border-radius: 0 5px 5px 0;
+}
+.fav-quote {
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.85;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.fav-meta {
+  margin-top: 7px;
+  color: var(--ink-soft);
+  font-size: 11px;
+  line-height: 1.6;
+}
+.fav-note {
+  width: 100%;
+  margin-top: 8px;
+  padding: 5px 8px;
+  border: none;
+  border-bottom: 1px dashed var(--line);
+  background: none;
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 12px;
+}
+.fav-note:focus { outline: none; border-bottom-color: var(--gold); }
+.fav-del {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  border: none;
+  background: none;
+  color: var(--ink-soft);
+  font-family: inherit;
+  font-size: 11px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity .15s, color .15s;
+}
+.fav-card:hover .fav-del { opacity: .7; }
+.fav-del:hover { opacity: 1; color: #c96a5a; }
+
+
+/* ── 她给你留的话 ─────────────────────────────────────
+   做成**纸条**的样子，不是聊天气泡 —— 这不是对话，
+   是她单方面写下来放在那儿的。
+
+   默认**合着**：只露出一条折角的边和一句「她留了 N 句话」。
+   点开才摊平、才标已读 —— 收起来慢慢看，是这个功能的趣味。 */
+.note-box {
+  flex: 0 0 auto;
+  margin: 0 0 10px;
+  padding: 0 2px;
+}
+.note-box.hidden { display: none; }
+
+.note-head {
+  display: block;
+  width: 100%;
+  padding: 7px 12px;
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--gold);
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--gold-soft) 45%, transparent);
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 12px;
+  text-align: left;
+  cursor: pointer;
+  transition: border-color .15s, background .15s;
+}
+.note-head:hover {
+  border-color: var(--gold);
+  border-left-color: var(--gold);
+}
+.note-box.open .note-head {
+  border-radius: 3px 3px 0 0;
+  border-bottom-color: transparent;
+}
+
+.note-slip {
+  position: relative;
+  padding: 12px 16px 9px 18px;
+  background: color-mix(in srgb, var(--paper) 94%, transparent);
+  border: 1px solid var(--line);
+  border-top: none;
+  box-shadow: 0 1px 4px var(--shadow);
+}
+.note-slip:last-child { border-radius: 0 0 3px 3px; }
+/* 微微歪一点，像随手压在桌上的一叠纸 */
+.note-slip:nth-child(odd)  { transform: rotate(-.22deg); }
+.note-slip:nth-child(even) { transform: rotate(.26deg); }
+
+.note-text {
+  color: var(--ink);
+  font-size: 14px;
+  line-height: 1.95;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.note-at {
+  margin-top: 5px;
+  color: var(--ink-soft);
+  font-size: 10px;
+  letter-spacing: .5px;
+  opacity: .8;
+}
+
+/* ── 他答应过的事 ─────────────────────────────────────
+   语气上刻意**不像待办清单**：到期的不标红、不加感叹号。
+   那是她心里悬着的一件小事，不是一笔账。 */
+.promise-list { display: flex; flex-direction: column; gap: 6px; }
+.promise-empty {
+  color: var(--ink-soft);
+  font-size: 11px;
+  line-height: 1.8;
+  opacity: .8;
+}
+.promise-row {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  font-size: 12px;
+  line-height: 1.6;
+}
+.promise-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  color: var(--ink);
+  cursor: help;
+  overflow-wrap: anywhere;
+}
+/* 过了说好的日子 —— 只是暗一点点，不是警告 */
+.promise-row.overdue .promise-text { color: var(--ink-soft); }
+.promise-row.overdue .promise-text::after {
+  content: "　（过了说好的日子）";
+  font-size: 10px;
+  opacity: .7;
+}
+.promise-btn {
+  flex: 0 0 auto;
+  padding: 1px 6px;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  background: none;
+  color: var(--ink-soft);
+  font-family: inherit;
+  font-size: 10px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity .15s, border-color .15s, color .15s;
+}
+.promise-row:hover .promise-btn { opacity: .8; }
+.promise-btn:hover { opacity: 1; border-color: var(--gold); color: var(--ink); }
+.fold summary b {
+  color: var(--gold);
+  font-weight: 600;
+  margin-left: 2px;
+}
+
+
+/* ── 图片（给她看图）─────────────────────────────────────
+   三条入口：粘贴 / 拖放 / 「给她看图」按钮。都在 app.js 里汇到 addImage()。
+
+   视觉上要「轻」—— 这个界面是纸色系的，缩略图别弄得像上传控件，
+   就是几张压在小纸条上的照片。 */
+.img-strip {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 9px;
+}
+.img-strip.hidden { display: none; }
+
+.img-thumb {
+  position: relative;
+  width: 62px;
+  height: 62px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--paper);
+  box-shadow: 0 1px 3px rgba(43, 47, 44, .12);
+}
+.img-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.img-del {
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  width: 17px;
+  height: 17px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: rgba(43, 47, 44, .62);
+  color: #fff;
+  font-size: 13px;
+  line-height: 15px;
+  cursor: pointer;
+  transition: background .15s;
+}
+.img-del:hover { background: var(--ink); }
+
+/* 历史气泡里的图 —— 比待发的略大，因为那是「已经发生的事」 */
+.bubble-imgs {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 6px;
+}
+.bubble-imgs img {
+  max-width: 190px;
+  max-height: 190px;
+  border-radius: 7px;
+  border: 1px solid var(--bubble-edge);
+  cursor: zoom-in;
+  display: block;
+}
+
+/* 拖图进窗口时给个提示边框 */
+body.drop-active::after {
+  content: "松手，给她看";
+  position: fixed;
+  inset: 10px;
+  border: 2px dashed var(--jade);
+  border-radius: 14px;
+  background: color-mix(in srgb, var(--jade) 8%, transparent);
+  color: var(--jade-dark);
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 999;
+}
+
+
+/* ── 测试档 ──────────────────────────────────────────────
+   切到测试档时，在窗口顶部压一条窄带。
+
+   为什么非要看得见：**两个档里的她是两个记忆体**。
+   不标出来的话，你会分不清刚才那句话进了哪份记录 ——
+   而这份记录的用途正是「别污染真实的那份」。 */
+body.test-mode::before {
+  content: "测试档 —— 说的话不进真实记录";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 900;
+  padding: 3px 0;
+  text-align: center;
+  font-size: 12px;
+  letter-spacing: .06em;
+  color: #fff;
+  background: var(--gold);
+  box-shadow: 0 1px 4px rgba(43, 47, 44, .18);
+  pointer-events: none;
+}
+
+
+/* ── 记忆面板：只读区 + 试召回 ─────────────────────────────
+   面板原来只有 memories（可增删改）。这两块补上「她还有什么」。
+
+   为什么只读：观察是她自己看出来的、承诺是你亲口说的 ——
+   手动改会破坏「这是真的发生过」。要改就改 memories。 */
+.mem-readonly { margin-top: 14px; }
+
+.mem-sec {
+  margin: 16px 0 7px;
+  font-size: 12px;
+  letter-spacing: .08em;
+  color: var(--ink-soft);
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 4px;
+}
+.mem-sec-note {
+  margin-left: 8px;
+  font-size: 11px;
+  letter-spacing: 0;
+  color: var(--ink-soft);
+  opacity: .72;
+}
+
+.mem-ro-list { display: flex; flex-direction: column; gap: 5px; }
+.mem-ro-item {
+  font-size: 13px;
+  line-height: 1.65;
+  padding: 5px 9px;
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--jade) 6%, transparent);
+  border-left: 2px solid var(--jade);
+  word-break: break-word;
+}
+.mem-ro-item.done {
+  opacity: .55;
+  border-left-color: var(--line);
+  text-decoration: line-through;
+  text-decoration-color: var(--line);
+}
+
+.mem-stats {
+  margin-top: 12px;
+  font-size: 11.5px;
+  color: var(--ink-soft);
+  font-family: ui-monospace, Consolas, monospace;
+  letter-spacing: .01em;
+}
+
+/* 试召回的结果 */
+.recall-out { margin-top: 8px; }
+.recall-head {
+  font-size: 12px;
+  color: var(--jade-dark);
+  margin-bottom: 6px;
+}
+.recall-item {
+  display: flex;
+  gap: 8px;
+  font-size: 12.5px;
+  line-height: 1.6;
+  padding: 5px 9px;
+  border-radius: 6px;
+  margin-bottom: 4px;
+  background: color-mix(in srgb, var(--paper) 55%, transparent);
+  word-break: break-word;
+}
+.recall-item.me { border-left: 2px solid var(--line); }
+.recall-item.shu { border-left: 2px solid var(--gold); }
+.recall-when {
+  flex: 0 0 auto;
+  color: var(--ink-soft);
+  opacity: .7;
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 11px;
+  padding-top: 1px;
+}
+
+/* 「头一回」那类事件给个金边 —— 它比「一起做过」重 */
+.mem-ro-item.first {
+  border-left-color: var(--gold);
+  background: color-mix(in srgb, var(--gold) 8%, transparent);
+}
+
+/* ── 记忆快照 ────────────────────────────────────────────
+   自动的（每天一份）用灰边，手动的用金边 —— 你想留的那些要看得出来。 */
+.snap-out { margin-top: 8px; }
+.snap-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 10px;
+  margin-bottom: 5px;
+  border-radius: 7px;
+  background: color-mix(in srgb, var(--paper) 60%, transparent);
+  border-left: 3px solid var(--line);
+  font-size: 12.5px;
+}
+.snap-item.manual { border-left-color: var(--gold); }
+.snap-info { flex: 1; line-height: 1.55; word-break: break-word; }
+.snap-note {
+  color: var(--ink-soft);
+  opacity: .8;
+  font-size: 11.5px;
+}
+
+
+/* 测试模式的小按钮（比如「回到基线」）—— 不该抢主操作的视觉重量 */
+button.tiny {
+  font-size: 11.5px;
+  padding: 2px 9px;
+  margin-left: 6px;
+  border-radius: 5px;
+  opacity: .78;
+}
+button.tiny:hover { opacity: 1; }
+
+/* ── 记忆面板的三段结构（2026-10-17 修）───────────────────
+   症状：面板越用越长，**关闭按钮被顶到屏幕外**，而且没法滚。
+   用户原话：「这个界面缺少关闭键和滚动（太长了会从ui里跑出去）」
+
+   根因：滚动只给了 .mem-list，但它没被 flex 约束（父容器没限高），
+   于是按内容自然撑开；.gate-actions 在它后面，自然被推出去。
+
+   修法：头尾固定，中间滚。这是最不容易再坏的一种。 */
+.mem-box {
+  /* 高度交给 max-height（继承 .gate-box.wide 的 82vh），
+     内部用 flex 分配：体吃满，头尾各占自己那份 */
+  overflow: hidden;
+}
+.mem-box > h2,
+.mem-box > .gate-note {
+  flex: 0 0 auto;            /* 头不参与伸缩，也不滚 */
+}
+.mem-body {
+  flex: 1 1 auto;
+  min-height: 0;             /* ⚠️ 关键：不加这个，flex 子项不会收缩，
+                                内容照样顶出去 —— 这是 flex 布局的经典坑 */
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 6px;        /* 给滚动条留位，免得贴住内容 */
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.mem-foot {
+  flex: 0 0 auto;            /* 尾不参与伸缩，永远在底部可见 */
+  align-items: center;
+  gap: 10px;
+  padding-top: 10px;
+  margin-top: 8px;
+  border-top: 1px solid var(--line);
+}
+.mem-foot-hint {
+  margin-right: auto;        /* 提示占左边，按钮靠右 */
+  font-size: 11.5px;
+  color: var(--ink-soft);
+  opacity: .7;
+}
+/* 面板里的滚动条做细一点，别抢视线 */
+.mem-body::-webkit-scrollbar { width: 8px; }
+.mem-body::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--ink-soft) 35%, transparent);
+  border-radius: 4px;
+}
+.mem-body::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, var(--ink-soft) 55%, transparent);
+}
+.mem-body::-webkit-scrollbar-track { background: transparent; }
+
+/* ── 语音播放键（2026-10-17 加）───────────────────────────
+   附着在她的气泡里，点了才出声。不自动播 ——
+   自动播会拖慢对话、打断打字，而且不想听的时候也得听。
+
+   放气泡右下角，小、半透明，不抢文字的视线。 */
+.voice-btn {
+  position: absolute;
+  right: 6px;
+  bottom: 4px;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink-soft);
+  font-size: 12px;
+  line-height: 22px;
+  cursor: pointer;
+  opacity: .38;
+  transition: opacity .15s, transform .15s, background .15s;
+}
+.voice-btn:hover {
+  opacity: 1;
+  background: color-mix(in srgb, var(--jade) 16%, transparent);
+}
+.voice-btn.playing {
+  opacity: 1;
+  color: var(--jade-dark);
+  background: color-mix(in srgb, var(--jade) 20%, transparent);
+}
+.voice-btn.loading {
+  opacity: .8;
+  animation: voice-pulse 1s ease-in-out infinite;
+}
+@keyframes voice-pulse {
+  0%, 100% { opacity: .35; }
+  50%      { opacity: .9; }
+}
+
+/* 气泡要留出按钮的位置，并成为定位参照 */
+.bubble.shu {
+  position: relative;
+  padding-bottom: 14px;      /* 原来没有这个，加了按钮需要下边距 */
+}
+
+/* ── 重做一轮（2026-10-17 加）─────────────────────────────
+   她会答偏，而偏差会顺着上下文传下去。所以最后一轮要能重来。
+
+   按钮默认**不显示**，鼠标移到气泡上才浮出来 ——
+   否则每条消息下面挂两个按钮，聊天区会很吵。 */
+.bubble.rewindable:hover .rewind-btn { opacity: 1; }
+.rewind-btn {
+  position: absolute;
+  right: 6px;
+  top: 4px;
+  padding: 1px 7px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  color: var(--ink-soft);
+  font-family: inherit;
+  font-size: 11px;
+  line-height: 17px;
+  cursor: pointer;
+  opacity: 0;                 /* 默认藏起来 */
+  transition: opacity .15s, background .15s, color .15s;
+}
+.rewind-btn:hover {
+  background: var(--jade-dark);
+  color: var(--page);
+  border-color: var(--jade-dark);
+}
+/* 两个按钮并排：第二个往左挪 */
+.rewind-btn + .rewind-btn { right: 62px; }
+.rewind-btn.primary {
+  background: var(--jade-dark);
+  color: var(--page);
+  border-color: var(--jade-dark);
+  opacity: 1;
+}
+
+/* 改我的话：就地变成输入框 */
+.rewind-edit {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed color-mix(in srgb, var(--line) 80%, transparent);
+}
+.rewind-ta {
+  width: 100%;
+  padding: 7px 9px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--paper) 70%, transparent);
+  color: var(--ink);
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.6;
+  resize: vertical;
+}
+.rewind-ta:focus {
+  outline: none;
+  border-color: var(--jade);
+}
+.rewind-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+  margin-top: 6px;
+}
+/* 编辑器里的按钮要一直看得见（那个气泡不一定在 hover） */
+.rewind-edit .rewind-btn { position: static; opacity: 1; }
+
+/* ── 留话 ────────────────────────────────────────────────
+   你隔了几天没来，她留的一句。和金边事件区分开 ——
+   那个是「发生过的事」，这个是「她等你说的话」。 */
+.msg.leftword .bubble.shu {
+  border-left: 3px solid var(--gold);
+  background: color-mix(in srgb, var(--gold) 9%, var(--mind-bubble));
+}
+.msg.leftword .who::after {
+  content: '　留的话';
+  font-size: 10.5px;
+  color: var(--gold);
+  opacity: .85;
+}
+
+/* 「她眼里的你」每条后面的「什么时候看出来的」。
+   用户报过这个部分「好几天没更新」，而面板上原来看不出哪条是新的。 */
+.mem-ro-when {
+  color: var(--ink-soft);
+  opacity: .62;
+  font-size: 11px;
+}
+
+
+/* 「她记得的事」里每条后面的小按钮（2026-10-19 加）
+   平时很淡，鼠标移到那一条上才显形 —— 免得面板变成一排按钮。 */
+.mem-ro-item { position: relative; padding-right: 46px; }
+.mem-ro-btn {
+  position: absolute;
+  right: 26px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 18px;
+  padding: 0;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--ink-soft);
+  font-size: 11px;
+  line-height: 18px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity .12s, background .12s, color .12s;
+}
+/* 第二个按钮（✕）再往右一点 */
+.mem-ro-btn + .mem-ro-btn,
+.mem-ro-btn:nth-of-type(2) { right: 4px; }
+.mem-ro-item:hover .mem-ro-btn { opacity: .75; }
+.mem-ro-btn:hover { opacity: 1; background: rgba(180, 120, 120, .18); color: #c06666; }
+.mem-ro-item.done .mem-ro-btn { opacity: .3; }
+
+
+/* 标了「头一回」的 ★（2026-10-20）
+   亮起来用金色，和没标的 ☆ 区分开。 */
+.mem-ro-btn.on { opacity: .95; color: var(--gold, #c9a961); }
+.mem-ro-item:hover .mem-ro-btn.on { opacity: 1; }
+
+
+/* 事件的手写表单（2026-10-22）
+   就地展开在面板里，不用浏览器弹窗 —— 弹窗样式不搭、只能单行、还改不了。 */
+.ev-form {
+  margin-top: 10px;
+  padding: 12px;
+  border: 1px dashed rgba(201, 169, 97, .35);
+  border-radius: 8px;
+  background: rgba(20, 26, 29, .6);
+}
+.ev-ta {
+  width: 100%;
+  box-sizing: border-box;
+  resize: vertical;
+  min-height: 62px;
+  padding: 9px 10px;
+  border: 1px solid rgba(232, 226, 212, .14);
+  border-radius: 6px;
+  background: rgba(11, 14, 16, .7);
+  color: var(--paper, #e8e2d4);
+  font-family: inherit;
+  font-size: 13.5px;
+  line-height: 1.7;
+}
+.ev-ta:focus {
+  outline: none;
+  border-color: rgba(111, 174, 144, .5);
+}
+.ev-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 9px;
+  flex-wrap: wrap;
+}
+.ev-first {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11.5px;
+  color: var(--paper-dim, #a8a294);
+  cursor: pointer;
+  margin-right: auto;
+}
+.ev-first input { accent-color: #c9a961; }
+.ev-save, .ev-cancel {
+  padding: 4px 15px;
+  border-radius: 999px;
+  font-size: 12px;
+  cursor: pointer;
+  font-family: inherit;
+  border: 1px solid rgba(201, 169, 97, .45);
+  background: transparent;
+  color: var(--gold, #c9a961);
+}
+.ev-save:hover:not(:disabled) { background: rgba(201, 169, 97, .14); }
+.ev-save:disabled { opacity: .5; cursor: default; }
+.ev-cancel {
+  border-color: rgba(232, 226, 212, .18);
+  color: var(--paper-dim, #a8a294);
+}
+.ev-cancel:hover { background: rgba(232, 226, 212, .07); }
+
+
+/* 项目进度（2026-10-24）
+   点「2/3」直接改数字；act 那行的按钮常显，不用悬停才看得见。 */
+.proj-bar {
+  display: inline-block;
+  margin-left: 4px;
+  padding: 0 6px;
+  border-radius: 999px;
+  border: 1px solid rgba(201, 169, 97, .35);
+  color: var(--gold, #c9a961);
+  font-size: 11px;
+  cursor: pointer;
+  transition: background .15s;
+}
+.proj-bar:hover { background: rgba(201, 169, 97, .16); }
+.mem-ro-item.act { padding-right: 74px; }
+.mem-ro-item.act .mem-ro-btn { opacity: .5; }
+.mem-ro-item.act:hover .mem-ro-btn { opacity: .95; }
+
+
+/* ── 左栏信息行统一成两列（2026-10-27）────────────────────────
+   原来「她知道的」是「圆点 + 裸文本标签 + 值」挤在一行：
+   标签会被值挤到换行（「你们的旧 / 事」），圆点也歪。
+   改成网格：标签定宽不换行，值占满剩余宽度、超出省略。 */
+.world-row,
+.life-item {
+  display: grid;
+  grid-template-columns: 5.2em minmax(0, 1fr);
+  gap: 8px;
+  align-items: baseline;
+  margin-top: 5px;
+}
+.world-label,
+.life-item .k {
+  color: var(--jade-dark);
+  font-size: 12px;
+  white-space: nowrap;
+}
+.world-note,
+.life-item .v {
+  font-size: 11.5px;
+  color: var(--ink-soft);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: right;
+}
+.world-note { color: var(--jade-dark); }
+
+/* 手边/心里是整句，不该被省略号截断；数值行（她知道的）才单行省略。 */
+.life-item .v { white-space: normal; line-height: 1.45; text-align: left; }
+.life-item { align-items: start; }
+
+/* 测试档这一行：勾选框和按钮并排，按钮靠右，文字不换行（2026-10-27）*/
+.chk-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+.chk-row .chk {
+  flex: 1 1 auto;
+  min-width: 0;
+  align-items: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.chk-row .tiny {
+  flex: 0 0 auto;
+  margin-left: 0;
+}
+
+/* 心情小标签：网格项默认 justify-self: stretch，会把它拉满整列 ——
+   所以那颗「兴致好」的胶囊变得又长又空。让它按内容宽度靠左（2026-10-27）。*/
+.life-item .mood-chip {
+  justify-self: start;
+  align-self: center;
+  margin-top: -1px;
+}
+
+
+/* 左栏「她的日记」入口（2026-10-27）
+   做成一条细带：不是按钮，是一张可以掀开的纸角。 */
+.diary-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 14px;
+  padding: 9px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--paper) 38%, transparent);
+  color: var(--jade-dark);
+  font-size: 12.5px;
+  letter-spacing: .08em;
+  text-decoration: none;
+  transition: border-color .18s, background .18s, transform .18s;
+}
+.diary-link::after {
+  content: '';
+  width: 5px; height: 5px;
+  border-right: 1px solid var(--jade-dark);
+  border-bottom: 1px solid var(--jade-dark);
+  transform: rotate(-45deg);
+  opacity: .6;
+  transition: transform .18s, opacity .18s;
+}
+.diary-link:hover {
+  border-color: var(--gold-soft);
+  background: color-mix(in srgb, var(--paper) 60%, transparent);
+}
+.diary-link:hover::after { transform: translateX(2px) rotate(-45deg); opacity: 1; }
+
+
+/* 公众模式：只糊对话内容，日期和侧栏照旧 —— 看起来还是界面，不是马赛克 */
+/* 公众模式（加强版）：**整页都糊** —— 对话、记忆、观察、事件、日记入口。
+   只留顶部标题和这张勾选框清晰，鼠标移到哪一块就显形哪一块。 */
+/* 勾选框本身必须看得清，否则没法关掉 */
+/* 公众模式：记忆面板 #memPanel 是独立浮层，不在 .panel / #log 里，
+   所以单独列进来。它显示的是记忆原文，模糊要更重。 */
+body.privacy #memPanel,
+body.privacy .sheet {
+  filter: blur(9px);
+  transition: filter .2s;
+}
+body.privacy #memPanel:hover,
+body.privacy .sheet:hover { filter: blur(0); }
+
+
+/* 记忆浮层：强制模糊（2026-10-27）
+   单给 #memPanel 加 filter 不生效 —— 可能是内部元素自己带了 filter/transform，
+   把父层的 filter 盖掉了。所以把子元素也一并糊上，加 !important 压过去。 */
+body.privacy #memPanel,
+body.privacy #memPanel * {
+  filter: blur(9px) !important;
+  transition: filter .2s;
+}
+body.privacy #memPanel:hover,
+body.privacy #memPanel:hover * { filter: blur(0) !important; }
+
+
+/* ═══ 磨砂玻璃（2026-11-02）══════════════════════════════════
+   **不改颜色** —— 底色用的就是原来那几支变量，只是加了透明度。
+   墨夜的卡片还是墨夜那张纸的颜色，宣纸还是宣纸，只是能透出底纹。
+
+   之前写成 var(--paper) 14% 是错的：那等于给所有主题统一加了一层浅色，
+   等于改了配色。 */
+
+.panel .card,
+.panel .affection,
+#log .msg .bubble {
+  /* 卡片原本就是 paper 系，这里只把不透明度降下来 */
+  background: color-mix(in srgb, var(--paper-2) 74%, transparent);
+  backdrop-filter: blur(20px) saturate(118%);
+  -webkit-backdrop-filter: blur(20px) saturate(118%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .04),
+              0 8px 22px rgba(0, 0, 0, .22);
+}
+
+/* 她说的稍厚一档（同一个色，不是另一个色） */
+#log .msg.her .bubble {
+  background: color-mix(in srgb, var(--paper-2) 84%, transparent);
+}
+
+/* 左栏本体：原来就是 var(--paper-2)，保持同色只是变半透明 */
+.panel {
+  background: color-mix(in srgb, var(--paper-2) 82%, transparent);
+  backdrop-filter: blur(24px) saturate(115%);
+  -webkit-backdrop-filter: blur(24px) saturate(115%);
+  border-right: 1px solid var(--line);
+}
+
+.chat-head {
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  backdrop-filter: blur(20px) saturate(115%);
+  -webkit-backdrop-filter: blur(20px) saturate(115%);
+  border-bottom: 1px solid var(--line);
+}
+
+.panel-foot,
+.composer-row {
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  backdrop-filter: blur(18px) saturate(115%);
+  -webkit-backdrop-filter: blur(18px) saturate(115%);
+}
+
+/* 气泡内层不参与玻璃，否则框套框 */
+#log .msg .body,
+#log .msg .bubble-text {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* 关掉玻璃时全部退回实心（颜色本来就一样，只是恢复不透明） */
+body.no-glass .panel { background: var(--paper-2); backdrop-filter: none; }
+body.no-glass .chat-head { background: var(--paper); backdrop-filter: none; }
+body.no-glass .panel-foot,
+body.no-glass .composer-row { background: var(--paper); backdrop-filter: none; }
+body.no-glass .panel .card,
+body.no-glass .panel .affection,
+body.no-glass #log .msg .bubble {
+  background: var(--paper-2);
+  backdrop-filter: none;
+  box-shadow: none;
+}
+
+
+
+
+/* ── 大时针盘（2026-11-02）────────────────────────────────
+   放在界面**外面**的空白里：宽屏时两边本来就有余量，正好给她一个钟。
+   和界面同一套材料（半透明底 + 模糊），但不用任何面板的底色。 */
+.big-clock {
+  position: fixed;
+  /* 靠上放，不居中 —— 这一侧以后还要加别的小部件（2026-11-02） */
+  right: 5vw;
+  top: 34px;
+  width: 214px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  z-index: 30;
+  pointer-events: none;
+  opacity: .92;
+}
+.big-clock svg { width: 176px; height: 176px; display: block; }
+
+.bc-glass {
+  fill: color-mix(in srgb, var(--paper) 8%, transparent);
+  stroke: none;
+}
+.bc-ring {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 1;
+  opacity: .5;
+}
+/* 白天的弧：留着 dash 让 JS 只画到"现在" */
+.bc-dayarc {
+  fill: none;
+  stroke: var(--gold);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  opacity: .45;
+  stroke-dasharray: 192 999;
+}
+.bc-ticks line {
+  stroke: var(--line);
+  stroke-width: 1;
+  opacity: .38;
+}
+.bc-orb {
+  fill: var(--gold);
+  transition: fill .8s;
+}
+.big-clock.night .bc-orb { fill: var(--mind-blue, #8fb0d8); }
+.big-clock.night .bc-dayarc { opacity: .18; }
+.bc-hub { fill: var(--gold); opacity: .7; }
+.bc-celestial {
+  transform-origin: 80px 80px;
+  transition: transform 1.2s ease-out;
+}
+.bc-text {
+  display: flex; flex-direction: column; align-items: center;
+  line-height: 1.35; margin-top: -6px;
+}
+.bc-text b {
+  font-size: 24px; font-weight: 400; letter-spacing: .1em;
+  /* 它浮在**页面底纹**上，不在面板里 —— 用 --jade-dark 会看不清 */
+  color: #e2d6ba;
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, .55);
+}
+.bc-text span {
+  font-size: 11.5px; color: #b8ad97; opacity: .95; letter-spacing: .1em;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, .5);
+}
+#bcMore { margin-top: 2px; opacity: .62; }
+
+/* 窄屏放不下就收起来 —— 它只是氛围，不该挤对话 */
+/* 没有余量就收起 —— 它不该压在对话上 */
+@media (max-width: 1499px) { .big-clock { display: none; } }
+
+
+/* 天气（2026-11-02）：钟下面一行，只有图标和温度，安静 */
+.bc-weather {
+  display: flex; align-items: center; gap: 7px;
+  margin-top: 2px;
+  color: #b8ad97;
+  font-size: 11.5px; letter-spacing: .08em;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, .5);
+}
+.bc-weather svg {
+  width: 22px; height: 22px;
+  fill: none; stroke: currentColor; stroke-width: 1.5;
+  stroke-linecap: round; opacity: .85;
+}
+/* 默认只显示云；JS 按天气切 class */
+.bc-weather .wx-sun,
+.bc-weather .wx-rain,
+.bc-weather .wx-snow { display: none; }
+.bc-weather[data-wx="sunny"] .wx-sun { display: block; }
+.bc-weather[data-wx="sunny"] .wx-cloud { display: none; }
+.bc-weather[data-wx="rain"] .wx-rain { display: block; }
+.bc-weather[data-wx="snow"] .wx-snow { display: block; }
+.bc-weather[data-wx="snow"] .wx-rain { display: none; }
+
+
+/* 快照里「其它会话」的轮次（测试档、空的 QQ 档）—— 小一号，不占主位 */
+.snap-other { font-size: 10.5px; opacity: .5; margin-left: 2px; }
+
+
+/* 右侧栏的下半部分（2026-11-04）：在一起天数 + 两条状态 + 日记一句 */
+.rail-block {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  margin-top: 6px;
+}
+.rail-days {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 3px;
+  color: #e2d6ba;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, .55);
+}
+.rail-days span {
+  font-size: 30px;
+  font-weight: 300;
+  letter-spacing: .04em;
+  font-variant-numeric: tabular-nums;
+}
+.rail-days i {
+  font-style: normal;
+  font-size: 11px;
+  color: #b8ad97;
+  letter-spacing: .2em;
+}
+
+.rail-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 10.5px;
+  color: #b8ad97;
+  letter-spacing: .1em;
+}
+.rail-k { flex: 0 0 26px; }
+.rail-track {
+  flex: 1 1 auto;
+  height: 3px;
+  border-radius: 2px;
+  background: rgba(216, 205, 182, .16);
+  overflow: hidden;
+}
+.rail-fill {
+  height: 100%;
+  width: 0;
+  border-radius: 2px;
+  background: linear-gradient(90deg, rgba(201,169,97,.55), rgba(201,169,97,.95));
+  transition: width .6s ease-out;
+}
+.rail-fill.alt {
+  background: linear-gradient(90deg, rgba(143,176,216,.45), rgba(143,176,216,.9));
+}
+
+.rail-diary {
+  width: 100%;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(216, 205, 182, .12);
+}
+.rail-diary-h {
+  font-size: 10.5px;
+  color: #8d8577;
+  letter-spacing: .22em;
+  margin-bottom: 6px;
+}
+.rail-diary p {
+  margin: 0;
+  font-size: 11.5px;
+  line-height: 1.85;
+  color: #c8bfab;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, .5);
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+
+/* 右侧栏小标题 + 日记提亮（2026-11-04） */
+.rail-cap {
+  text-align: center;
+  font-size: 10px;
+  color: #8d8577;
+  letter-spacing: .34em;
+  margin-bottom: -4px;
+}
+.rail-diary p {
+  color: #ded4c0;          /* 原来 #c8bfab，在深色底上偏暗 */
+  opacity: .95;
+}
+
+
+/* ═══ 右侧栏美化（2026-11-04）═══════════════════════════════
+   几条原则：
+     · 不加边框、不加卡片 —— 它浮在背景上，加框就成了第二个界面
+     · 分隔用「渐变细线」，两头淡出，比实线安静
+     · 数字用 tabular，跳动时不抖
+     · 表盘后面给一层极淡的暖光，让它"亮"而不是"有边框" */
+
+.big-clock::before {
+  content: '';
+  position: absolute;
+  top: -18px;
+  width: 210px;
+  height: 210px;
+  border-radius: 50%;
+  background: radial-gradient(circle,
+              rgba(201, 169, 97, .10) 0%,
+              rgba(201, 169, 97, .04) 45%,
+              transparent 70%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* 分隔线：中间实、两头淡 */
+.rail-block,
+.rail-diary {
+  position: relative;
+}
+.rail-block::before,
+.rail-diary::before {
+  content: '';
+  position: absolute;
+  top: -12px;
+  left: 12%;
+  width: 76%;
+  height: 1px;
+  background: linear-gradient(90deg,
+              transparent,
+              rgba(216, 205, 182, .22),
+              transparent);
+}
+.rail-diary::before { top: -4px; }
+
+/* 数字更端正 */
+.rail-days span {
+  font-size: 34px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0;
+  line-height: 1.1;
+}
+.rail-cap {
+  margin-bottom: -2px;
+  opacity: .8;
+}
+
+/* 状态条：轨道更轻，填充带一点内亮 */
+.rail-track {
+  height: 4px;
+  background: rgba(216, 205, 182, .10);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, .35);
+}
+.rail-fill {
+  box-shadow: 0 0 6px rgba(201, 169, 97, .35);
+}
+.rail-fill.alt {
+  box-shadow: 0 0 6px rgba(143, 176, 216, .30);
+}
+
+/* 日记：首字下沉一点点，像翻开的纸 */
+.rail-diary p {
+  line-height: 1.95;
+  letter-spacing: .01em;
+}
+.rail-diary p::first-letter {
+  font-size: 15px;
+  color: #efe6d2;
+}
+
+
+/* ═══ 她的家（2026-11-04）═══════════════════════════════════
+   剖开的立面：二楼在上、一楼在中、院子在前。
+   她所在的那一格点亮，其余压暗 —— 位置一眼看得出来。 */
+.house-map {
+  width: 100%;
+  margin: 14px 0 0;
+  padding: 8px 4px 2px;
+  border-top: 1px solid rgba(216, 205, 182, .12);
+}
+.hm-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  font-size: 10.5px; letter-spacing: .2em; color: var(--ink-soft);
+  opacity: .85; margin-bottom: 4px;
+}
+.hm-head b {
+  font-weight: 400; font-size: 11px; letter-spacing: .1em;
+  color: var(--gold, #c9a961);
+}
+#hmSvg { width: 100%; display: block; }
+
+.hm-roof, .hm-roof2 { stroke: var(--line); stroke-width: 1; fill: none; opacity: .5; }
+.hm-room {
+  fill: color-mix(in srgb, var(--jade, #7ea79a) 11%, transparent);
+  stroke: var(--line); stroke-width: .7; opacity: .85;
+  transition: fill .5s, stroke .5s;
+}
+.hm-room.yard { stroke-dasharray: 2.5 2.5; }
+.hm-mid, .hm-div { stroke: var(--line); stroke-width: .6; opacity: .4; }
+.hm-lb {
+  font-size: 12px; fill: var(--ink); opacity: .92;
+  letter-spacing: .06em; font-family: inherit;
+}
+.hm-lb.sm { font-size: 10px; opacity: .72; }
+
+.hm-room.on {
+  fill: color-mix(in srgb, var(--gold, #c9a961) 16%, transparent);
+  stroke: var(--gold, #c9a961); stroke-width: 1; opacity: 1;
+}
+.hm-dot { fill: var(--gold, #c9a961); transition: cx .6s, cy .6s; }
+.hm-halo {
+  fill: var(--gold, #c9a961); opacity: .18;
+  transition: cx .6s, cy .6s;
+  animation: hmBreath 3.4s ease-in-out infinite;
+}
+@keyframes hmBreath {
+  0%, 100% { opacity: .10; }
+  50%      { opacity: .26; }
+}
+@media (prefers-reduced-motion: reduce) { .hm-halo { animation: none; opacity: .18; } }
+
+
+/* ═══ 2. 右栏排版整理（2026-11-04）═════════════════════════
+   规则：小标题同一字号与字距；区块间距统一 14px；分隔线全用渐变。 */
+.big-clock {
+  --rail-gap: 14px;
+  gap: var(--rail-gap);
+  color: #cfc6b4;
+}
+.rail-cap,
+.rail-diary-h,
+.hm-head {
+  font-size: 10px !important;
+  letter-spacing: .26em !important;
+  color: #8d8577 !important;
+  opacity: 1 !important;
+  text-transform: none;
+}
+/* 小标题和内容之间不要挤 */
+.rail-cap { margin-bottom: 2px; }
+.bc-weather { margin-top: 0; color: #bdb3a0; }
+
+/* 统一分隔：都在区块上沿画一条两头淡出的线 */
+.rail-block::before,
+.rail-diary::before,
+.house-map::before {
+  content: '';
+  position: absolute;
+  left: 6%;
+  width: 88%;
+  height: 1px;
+  top: -7px;
+  background: linear-gradient(90deg, transparent,
+              rgba(216, 205, 182, .22), transparent);
+}
+.rail-block, .rail-diary, .house-map { position: relative; }
+.house-map { border-top: 0; margin-top: 4px; padding-top: 6px; }
+
+/* 「在一起」那组读数也统一 */
+.rail-days span { font-size: 32px; color: #ece2cc; }
+.rail-bar { color: #a99f8c; }
+.rail-track { height: 3px; background: rgba(216, 205, 182, .12); }
+.rail-fill { box-shadow: none; }
+
+/* 心情条按冷暖走色（valence 由 JS 写进 --v） */
+.rail-fill#railValence {
+  background: linear-gradient(90deg,
+    hsl(calc(200 - var(--v, 60) * 1.4) 42% 58%),
+    hsl(calc(200 - var(--v, 60) * 1.4) 55% 70%));
+}
+
+/* ═══ 3. 折叠区展开的缓动（2026-11-04）══════════════════════
+   details 没有原生过渡，用内容入场动画最省事。 */
+
+
+
+/* ═══ 4. 背景动画（2026-11-04）══════════════════════════════
+   **刻意极慢、极淡**：一层暖金与一层青碧在纸纹后面缓缓换气。
+   它是"屋里灯光的呼吸"，不该被注意到 —— 一旦看得出在动，就是失败了。
+   挂在负 z-index，落在纸纹之上、所有面板之下。 */
+#inkDrift {
+  position: fixed;
+  inset: -12%;
+  z-index: -1;
+  pointer-events: none;
+  opacity: .55;
+  background:
+    radial-gradient(38% 34% at 30% 22%, rgba(201, 169, 97, .16), transparent 70%),
+    radial-gradient(42% 38% at 72% 74%, rgba(126, 167, 154, .14), transparent 72%);
+  animation: driftBreath 46s ease-in-out infinite alternate;
+  will-change: transform, opacity;
+}
+@keyframes driftBreath {
+  0%   { transform: translate3d(-1.5%, -1%, 0) scale(1);    opacity: .42; }
+  50%  { transform: translate3d(1%, 1.5%, 0) scale(1.04);   opacity: .60; }
+  100% { transform: translate3d(2%, -1%, 0) scale(1.02);    opacity: .48; }
+}
+@media (prefers-reduced-motion: reduce) {
+  #inkDrift { animation: none; opacity: .45; }
+  .fold[open] > *:not(summary) { animation: none; }
+}
+
+
+/* ═══ 统一字体（2026-11-04）════════════════════════════════
+   原来只有 body 声明了一次中文字体，**西文和数字没有指定** ——
+   于是英文/数字落到系统的默认衬线（Times），和中文的字重、字宽对不上，
+   时间戳、天数、用量这些数字看着像"另一个字体"。
+
+   现在统一成一支：先 Georgia（西文与数字），再按顺序落到中文衬线。
+   Georgia 的等高数字比 Times 稳，和宋体的粗细也接近。 */
+:root {
+  --f-serif: "Georgia", "Songti SC", "SimSun", "Noto Serif CJK SC", serif;
+  --f-mono: ui-monospace, Consolas, "Cascadia Mono", monospace;
+}
+
+html,
+body,
+button,
+input,
+select,
+textarea,
+summary,
+.msg,
+.bubble,
+.hm-lb,
+.rail-days,
+.bc-text {
+  font-family: var(--f-serif);
+}
+
+/* 两处**有意**保留等宽：接口密钥、以及代码/调试输出。
+   密钥要能一眼数清字符，衬线体不适合。 */
+.gate-box input,
+.mono,
+pre,
+code {
+  font-family: var(--f-mono);
+}
+
+/* 数字统一等高、等宽，跳动时不抖 */
+.msg .time,
+.bc-text b,
+.rail-days span,
+.stat-v {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1;
+}
+
+
+/* ═══ 折叠区动画（2026-11-04）══════════════════════════════
+   details 不能过渡高度（open 是瞬时切换）。做法：
+   外层 grid-template-rows 0fr → 1fr，内层 overflow hidden。
+   0fr/1fr 会按比例插值，所以高度是自然长的。
+
+   不用 max-height: 0 → 3000px —— 那样前 80% 的时间都浪费在空白里，
+   看起来像"点了没反应然后突然出现"。 */
+.fold-body {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: grid-template-rows .27s cubic-bezier(.4, 0, .2, 1),
+              opacity .18s ease-out;
+}
+.fold-inner { overflow: hidden; min-height: 0; }
+
+.fold[open] > .fold-body {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  transition: grid-template-rows .29s cubic-bezier(.4, 0, .2, 1),
+              opacity .22s ease-out .05s;
+}
+
+/* 箭头跟着转，同一条曲线 */
+.fold > summary .fold-mark { transition: transform .27s cubic-bezier(.4, 0, .2, 1); }
+.fold[open] > summary .fold-mark { transform: rotate(180deg); }
+
+/* 键盘 Tab 到标题时有可见焦点 */
+.fold > summary:focus-visible {
+  outline: 1px solid color-mix(in srgb, var(--gold, #c9a961) 55%, transparent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fold-body, .fold[open] > .fold-body,
+  .fold > summary .fold-mark { transition: none; }
+}
+
+
+/* ═══ 面板底部工具行（2026-11-04）════════════════════════════
+   设置原本是一个常驻的大折叠块，占掉左栏最后三分之一的屏幕 ——
+   可它一个月才改一次。现在收成一个图标，日记单独放出来。 */
+.panel-tools {
+  display: flex;
+  gap: 6px;
+  margin: 6px 0 10px;
+}
+.pt-item {
+  flex: 1 1 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 6px;
+  border-radius: 7px;
+  border: 1px solid color-mix(in srgb, var(--line) 55%, transparent);
+  background: color-mix(in srgb, var(--paper-2) 62%, transparent);
+  color: var(--ink-soft);
+  font: inherit;
+  font-size: 11.5px;
+  letter-spacing: .12em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background .18s, border-color .18s, color .18s;
+}
+.pt-item:hover,
+.pt-item:focus-visible {
+  color: var(--ink);
+  border-color: color-mix(in srgb, var(--gold, #c9a961) 45%, transparent);
+  background: color-mix(in srgb, var(--paper-2) 82%, transparent);
+  outline: none;
+}
+.pt-item svg {
+  width: 15px; height: 15px;
+  fill: none; stroke: currentColor; stroke-width: 1.4;
+  stroke-linecap: round; stroke-linejoin: round;
+  opacity: .9;
+}
+.pt-item[aria-expanded="true"] {
+  color: var(--gold, #c9a961);
+  border-color: color-mix(in srgb, var(--gold, #c9a961) 55%, transparent);
+}
+
+/* 设置块：默认收起且不占位，点齿轮才展开 */
+.settings-fold { margin-top: 2px; }
+body:not(.settings-open) .settings-fold { display: none; }
+body.settings-open .settings-fold { display: block; }
+
+
+/* ═══ 打开页面时的入场（2026-11-04）══════════════════════════
+   四个折叠区默认都是展开的，所以"点开才有动画"这件事很容易看不见。
+   这里补一段**只在首次加载**播放的错峰：标题在上、内容在后，
+   每块错开 70ms，顺序从「她此刻」往下。
+
+   播完由 JS 摘掉 body.intro —— 之后收起/展开仍然走 transition，
+   两套动画不会打架。 */
+/* 2026-11-04 v2：第一版是 2px / 8px 的位移，实测"看不见" ——
+   位移必须够大才读得出来。现在是 10px / 16px，错峰也拉到 110ms。 */
+body.intro .fold > summary {
+  animation: foldHead .46s cubic-bezier(.22, .61, .36, 1) both;
+  animation-delay: calc(var(--i, 0) * 110ms);
+}
+body.intro .fold[open] > .fold-body {
+  animation: foldEnter .58s cubic-bezier(.22, .61, .36, 1) both;
+  animation-delay: calc(var(--i, 0) * 110ms + 60ms);
+}
+body.intro .card:not(.fold .card),
+body.intro .portrait-frame,
+body.intro .name-row {
+  animation: foldEnter .6s cubic-bezier(.22, .61, .36, 1) both;
+}
+
+@keyframes foldHead {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes foldEnter {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body.intro .fold > summary,
+  body.intro .fold[open] > .fold-body,
+  body.intro .card:not(.fold .card),
+  body.intro .portrait-frame,
+  body.intro .name-row { animation: none; }
+}
+
+
+/* ═══ 底栏重做（2026-11-04）══════════════════════════════════
+   原来是「粗体文字 + 原生复选框 + 一个灰数字」，和上面刚做好的
+   图标条不在一个世界里。现在统一成：幽灵按钮 + 胶囊开关。 */
+.panel-foot {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+  padding-top: 10px;
+  border-top: 1px dashed color-mix(in srgb, var(--line) 40%, transparent);
+}
+
+/* 记忆：幽灵按钮，右侧一个计数胶囊 */
+.pf-btn {
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 10px;
+  border-radius: 7px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--ink-soft);
+  font: inherit;
+  font-size: 11.5px;
+  letter-spacing: .1em;
+  cursor: pointer;
+  transition: color .16s, background .16s, border-color .16s;
+}
+.pf-btn svg {
+  width: 15px; height: 15px;
+  fill: none; stroke: currentColor; stroke-width: 1.3;
+  stroke-linecap: round; stroke-linejoin: round;
+  opacity: .75;
+}
+.pf-btn b {
+  margin-left: auto;
+  min-width: 20px;
+  padding: 1px 6px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--jade, #7ea79a) 22%, transparent);
+  color: var(--ink-soft);
+  font-size: 10.5px;
+  font-weight: 400;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+}
+.pf-btn:hover,
+.pf-btn:focus-visible {
+  color: var(--ink);
+  background: color-mix(in srgb, var(--paper-2) 70%, transparent);
+  border-color: color-mix(in srgb, var(--line) 50%, transparent);
+  outline: none;
+}
+
+/* 公众模式：胶囊开关，勾上后轨道变暖金色 */
+.pf-switch {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px 6px 6px;
+  border-radius: 999px;
+  cursor: pointer;
+  color: var(--ink-soft);
+  font-size: 11px;
+  letter-spacing: .1em;
+  user-select: none;
+  transition: color .16s, background .16s;
+}
+.pf-switch input {
+  position: absolute;
+  opacity: 0;
+  width: 0; height: 0;
+}
+.pf-track {
+  position: relative;
+  display: block;
+  width: 28px; height: 15px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--line) 42%, transparent);
+  transition: background .2s;
+}
+.pf-knob {
+  position: absolute;
+  top: 2px; left: 2px;
+  width: 11px; height: 11px;
+  border-radius: 50%;
+  background: var(--paper, #f3ede1);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, .35);
+  transition: transform .2s cubic-bezier(.4, 0, .2, 1), background .2s;
+}
+.pf-switch input:checked + .pf-track {
+  background: color-mix(in srgb, var(--gold, #c9a961) 78%, transparent);
+}
+.pf-switch input:checked + .pf-track .pf-knob {
+  transform: translateX(13px);
+  background: #2a2118;
+}
+.pf-switch input:focus-visible + .pf-track {
+  outline: 1px solid color-mix(in srgb, var(--gold, #c9a961) 60%, transparent);
+  outline-offset: 2px;
+}
+.pf-switch:hover { color: var(--ink); }
+
+
+/* ═══ 面板的留白（2026-11-04）═══════════════════════════════
+   设置收成图标之后，底栏上面空了一大截。与其塞内容，不如让它看起来
+   是"刻意留的"：一根细线从上往下淡出，底端一个小小的金点。
+
+   它会 flex:1 撑满剩余空间，所以内容多的时候自动消失，
+   不会在窄屏上顶出滚动条。 */
+.panel-air {
+  flex: 1 1 auto;
+  min-height: 20px;
+  display: flex;
+  justify-content: center;
+  padding: 6px 0;
+}
+.panel-air i {
+  position: relative;
+  display: block;
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(180deg,
+    transparent 0%,
+    color-mix(in srgb, var(--line) 55%, transparent) 22%,
+    color-mix(in srgb, var(--line) 30%, transparent) 88%,
+    transparent 100%);
+}
+.panel-air i::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  bottom: 6px;
+  width: 5px;
+  height: 5px;
+  margin-left: -2.5px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--gold, #c9a961) 45%, transparent);
+  box-shadow: 0 0 8px color-mix(in srgb, var(--gold, #c9a961) 35%, transparent);
+}
+
+/* 底栏贴底：内容不满时，工具行与底栏留在下方，而不是浮在中间 */
+.panel-tools { margin-top: 0; }
+.panel-foot { margin-top: 0; }
+
+
+/* 院门外（2026-11-05）：比院子更"远"一档 —— 虚线更疏、底子更冷 */
+.hm-room.road {
+  fill: color-mix(in srgb, var(--mind-blue, #8fb0d8) 6%, transparent);
+  stroke-dasharray: 1.5 3.5;
+  opacity: .8;
+}
+.hm-room.road.on {
+  fill: color-mix(in srgb, var(--mind-blue, #8fb0d8) 20%, transparent);
+  stroke: var(--mind-blue, #8fb0d8);
+  opacity: 1;
+}
+.hm-roadline {
+  stroke: var(--line);
+  stroke-width: .5;
+  opacity: .3;
+  stroke-dasharray: 1 3;
+}
+
+
+/* 最近记得（2026-11-05）—— 三条，按她记得最牢的顺序 */
+.card.memtop { margin: 0; }
+.memtop ul {
+  list-style: none;
+  margin: 8px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.memtop li {
+  position: relative;
+  padding-left: 12px;
+  font-size: 12px;
+  line-height: 1.75;
+  color: var(--ink);
+  opacity: .92;
+}
+.memtop li::before {
+  content: '';
+  position: absolute;
+  left: 2px;
+  top: .68em;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--gold, #c9a961) 65%, transparent);
+}
+.memtop li.memtop-empty { opacity: .45; padding-left: 0; }
+.memtop li.memtop-empty::before { display: none; }
+
+/* 常驻块（用量 / 答应过的事）：原来是折叠的，现在直接摊开 */
+.open-block .open-title {
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: var(--ink-soft);
+  padding: 3px 2px 7px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.open-block .open-title b { color: var(--ink); font-weight: 400; }
+
+
+/* QQ 桥接预留块（2026-11-05）—— 现在只有三行状态，位置先占住 */
+.card.qqcard { margin: 0; }
+.qqcard .life-item { font-size: 12px; }
+.qq-note {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px dashed color-mix(in srgb, var(--line) 32%, transparent);
+  font-size: 11px;
+  line-height: 1.7;
+  color: var(--ink-soft);
+  opacity: .6;
+}
+/* 接通了就把状态点成青绿，断着是灰的 */
+.qqcard.on .qq-note { opacity: .8; }
+
+
+/* ═══ QQ 栏（2026-11-05）════════════════════════════════════
+   效仿最右那栏：fixed 定位、不占布局、只在宽屏出现。
+   它靠左放，和右边的钟左右对称 —— 中间那块对话始终在正中。 */
+.qq-rail {
+  position: fixed;
+  left: 4vw;
+  top: 34px;
+  width: 214px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  z-index: 30;
+  pointer-events: none;
+  color: #cfc6b4;
+}
+.qq-rail > * { pointer-events: auto; }
+
+/* 头部：图标 + 名字 + 未读数 */
+.qr-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11px;
+  letter-spacing: .22em;
+  color: #8d8577;
+}
+.qr-head svg {
+  width: 16px; height: 16px;
+  fill: none; stroke: currentColor; stroke-width: 1.3;
+  stroke-linecap: round; stroke-linejoin: round;
+  opacity: .8;
+}
+.qr-head b {
+  margin-left: auto;
+  font-weight: 400;
+  font-size: 10.5px;
+  color: #b8ad97;
+  letter-spacing: .1em;
+}
+
+/* 数据行：和左栏的 life-item 同一套节奏 */
+.qr-block { display: flex; flex-direction: column; gap: 7px; }
+.qr-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 11.5px;
+}
+.qr-k { color: #8d8577; letter-spacing: .16em; flex: 0 0 auto; }
+.qr-v {
+  color: #ded4c0;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.qr-cap {
+  font-size: 10px;
+  letter-spacing: .26em;
+  color: #8d8577;
+}
+.qr-sep {
+  height: 1px;
+  background: linear-gradient(90deg, transparent,
+              rgba(216, 205, 182, .22), transparent);
+}
+
+/* 她手机上的内容：先占位，接上后往里填 */
+.qr-feed {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.qr-feed li {
+  position: relative;
+  padding-left: 11px;
+  font-size: 11.5px;
+  line-height: 1.75;
+  color: #c8bfab;
+}
+.qr-feed li::before {
+  content: '';
+  position: absolute;
+  left: 1px; top: .7em;
+  width: 3px; height: 3px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--mind-blue, #8fb0d8) 70%, transparent);
+}
+.qr-feed li.qr-empty { padding-left: 0; opacity: .5; }
+.qr-feed li.qr-empty::before { display: none; }
+
+.qr-foot {
+  font-size: 10px;
+  letter-spacing: .1em;
+  color: #6f6859;
+  opacity: .8;
+  font-variant-numeric: tabular-nums;
+}
+
+/* 没有余量就收起，理由和最右栏一样 */
+@media (max-width: 1499px) { .qq-rail { display: none; } }
+
+
+/* ═══ 公众模式（2026-11-05 重做）════════════════════════════
+   原则：**凡是"你"留下的东西，一律不可读**。
+
+   做法从"挑几块糊"改成"整屏糊 + 一层遮罩"：
+   容器（左面板 / 对话 / QQ 栏 / 时钟栏）全部 blur，
+   新加的任何一块都会自动被覆盖；上面再压一层薄雾，
+   防止有人把截图调亮后还能看出轮廓。 */
+body.privacy .panel,
+body.privacy .chat,
+body.privacy .qq-rail,
+body.privacy .big-clock {
+  pointer-events: none;          /* 糊着的时候点不到任何东西 */
+}
+
+body.privacy::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  pointer-events: none;
+  background: radial-gradient(120% 100% at 50% 40%,
+              rgba(12, 14, 19, .12) 0%,
+              rgba(12, 14, 19, .26) 70%,
+              rgba(12, 14, 19, .34) 100%);
+  /* 不再二次模糊 —— 主体已经轻糊了，再叠一层就又看不见了 */
+  backdrop-filter: saturate(.9);
+  -webkit-backdrop-filter: saturate(.9);
+}
+
+/* 出口按钮永远在最上层 */
+#shu-privacy-exit {
+  z-index: 60 !important;
+}
+
+/* 糊着的时候，输入框也不要给出焦点光标 */
+body.privacy #input { caret-color: transparent; }
+
+
+/* ═══ 公众模式：遮挡「值」（2026-11-06）══════════════════════
+   不是删文字，也不是模糊 —— 是在值上面盖一块色块。
+   好处：布局不动、原文还在（关掉就恢复），看起来像"打了码"。
+
+   只盖"值"，标签（手边 / 心里 / 心情 / 口味…）一律留着：
+   别人看得懂她在过什么日子，读不出具体内容。 */
+body.privacy .panel .life-item .v,
+body.privacy .panel #moodChip,
+body.privacy .panel .world-note,
+body.privacy .panel #usageLine,
+body.privacy .panel .promise-list,
+body.privacy #memTopList li {
+  color: transparent !important;
+  background: color-mix(in srgb, var(--ink) 26%, transparent);
+  border-radius: 3px;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--line) 30%, transparent);
+  text-shadow: none !important;
+  user-select: none;
+}
+
+/* 心情那个小胶囊原本有自己的底色和边框，这里统一成遮挡块 */
+body.privacy .panel #moodChip {
+  border-color: transparent !important;
+  padding: 0 6px;
+}
+
+
+/* 公众模式：立绘与右栏（2026-11-06）
+   立绘挡住 —— 那是她的脸，别人不该看得清。
+   右栏同左栏的规则：留标签，盖住值。 */
+body.privacy .portrait-frame img {
+  filter: blur(12px) !important;
+}
+body.privacy .portrait-frame {
+  position: relative;
+}
+body.privacy .portrait-frame::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(12, 14, 19, .28);
+  border-radius: 4px;
+  pointer-events: none;
+}
+
+body.privacy #railTogether,
+body.privacy #railDiary,
+body.privacy #qqLast,
+body.privacy #qqCount,
+body.privacy #qqBadge,
+body.privacy #qqState {
+  color: transparent !important;
+  background: color-mix(in srgb, var(--ink) 26%, transparent);
+  border-radius: 3px;
+  text-shadow: none !important;
+  user-select: none;
+}
+
+
+/* 日记：直接把 <p> 变成一块占位（最稳，不再和行高/首字较劲） */
+body.privacy #railDiary {
+  display: block !important;
+  -webkit-line-clamp: unset !important;
+  font-size: 0 !important;
+  line-height: 0 !important;
+  color: transparent !important;
+  text-shadow: none !important;
+  height: 92px;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--ink) 26%, transparent);
+}
+
+
+/* 首字下沉那条规则（.rail-diary p::first-letter）会把首字放大到 15px，
+   所以 font-size:0 之后它还会露出来 —— 这里单独按住它。 */
+body.privacy #railDiary::first-letter {
+  font-size: 0 !important;
+  color: transparent !important;
+}
+
+
+/* 重新生成按钮（2026-11-07）：小、克制、只在悬停时亮 */
+.life-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.regen-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin-left: auto;
+  padding: 2px 6px;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  background: transparent;
+  color: var(--ink-soft);
+  font: inherit;
+  font-size: 10px;
+  letter-spacing: .08em;
+  cursor: pointer;
+  opacity: .55;
+  transition: opacity .16s, color .16s, background .16s, border-color .16s;
+}
+.regen-btn svg {
+  width: 11px; height: 11px;
+  fill: none; stroke: currentColor; stroke-width: 1.4;
+  stroke-linecap: round; stroke-linejoin: round;
+}
+.regen-btn:hover,
+.regen-btn:focus-visible {
+  opacity: 1;
+  color: var(--gold, #c9a961);
+  background: color-mix(in srgb, var(--paper-2) 70%, transparent);
+  border-color: color-mix(in srgb, var(--line) 45%, transparent);
+  outline: none;
+}
+.regen-btn[disabled] { opacity: .35; cursor: default; }
+.regen-btn.spin svg { animation: regenSpin .9s linear infinite; }
+@keyframes regenSpin { to { transform: rotate(360deg); } }
+
+
+/* 左栏「接上 QQ」（2026-11-09）：像一张小纸片，不抢眼 */
+.qr-act {
+  width: 100%;
+  margin-top: 8px;
+  padding: 6px 8px;
+  border: 1px solid color-mix(in srgb, var(--line) 45%, transparent);
+  border-radius: 6px;
+  background: color-mix(in srgb, var(--paper-2) 60%, transparent);
+  color: var(--ink-soft);
+  font: inherit;
+  font-size: 11px;
+  letter-spacing: .08em;
+  cursor: pointer;
+  transition: color .16s, border-color .16s, background .16s;
+}
+.qr-act:hover:not([disabled]) {
+  color: var(--gold, #c9a961);
+  border-color: color-mix(in srgb, var(--gold, #c9a961) 45%, transparent);
+}
+.qr-act[disabled] { opacity: .5; cursor: default; }
+.qr-act.on { color: var(--gold, #c9a961); }
+.qr-note {
+  margin-top: 4px;
+  font-size: 10px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  opacity: .6;
+}
+
+
+/* ── 窗外（2026-11-10 v2）─────────────────────────────
+   四套天光（黎明/白日/黄昏/夜）+ 远山 + 云 + 雨雪雾 + 玻璃反光。
+   配色由 JS 通过 CSS 变量注入，切换时是渐变过渡。 */
+.wr-window {
+  position: relative;
+  margin-top: 6px;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #0d1119;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, .05),
+    0 1px 6px rgba(0, 0, 0, .35);
+  --sky-1: #6f7b8c; --sky-2: #47505f;
+  --glow-1: rgba(255, 240, 200, .55); --glow-2: rgba(255, 240, 200, 0);
+  --warm-1: rgba(255, 214, 150, .30); --warm-2: rgba(255, 214, 150, 0);
+  --hill: #2a3240; --tree: #1d2430;
+  --tree-op: .85;
+}
+.wr-window svg { display: block; width: 100%; height: auto; }
+
+.wr-window .wr-sky { transition: fill 1.4s ease; }
+.wr-window .wr-sky-1 { stop-color: var(--sky-1); }
+.wr-window .wr-sky-2 { stop-color: var(--sky-2); }
+.wr-window .wr-glow-1 { stop-color: var(--glow-1); }
+.wr-window .wr-glow-2 { stop-color: var(--glow-2); }
+.wr-window .wr-warm-1 { stop-color: var(--warm-1); }
+.wr-window .wr-warm-2 { stop-color: var(--warm-2); }
+
+.wr-window .wr-hills { fill: var(--hill); transition: fill 1.4s; }
+.wr-window .wr-tree {
+  stroke: var(--tree); stroke-width: 1.6; fill: none;
+  stroke-linecap: round; opacity: var(--tree-op);
+  transition: stroke 1.4s, opacity 1.4s;
+}
+
+/* 月亮 / 太阳 */
+.wr-window .wr-orb { transition: opacity .8s; }
+.wr-window .wr-disc { fill: #f6f1e2; transition: fill 1.2s; }
+.wr-window .wr-crater { fill: rgba(0, 0, 0, .10); }
+.wr-window .wr-halo { opacity: .9; }
+.wr-window[data-t="night"] .wr-disc { fill: #e7ecff; }
+.wr-window[data-t="dusk"] .wr-disc { fill: #ffd7a1; }
+.wr-window[data-t="dawn"] .wr-disc { fill: #ffe6c4; }
+
+/* 云：远近两层，速度不同 */
+.wr-window .wr-cloud { fill: rgba(255, 255, 255, .22); }
+.wr-window .wr-cloud-far { animation: wrDrift 46s linear infinite; }
+.wr-window .wr-cloud-near { animation: wrDrift 28s linear infinite reverse; }
+.wr-window[data-w="clear"] .wr-clouds { opacity: .18; }
+.wr-window[data-w="cloudy"] .wr-clouds { opacity: .95; }
+.wr-window[data-w="rain"] .wr-cloud { fill: rgba(206, 216, 232, .26); }
+.wr-window[data-w="snow"] .wr-cloud { fill: rgba(235, 240, 250, .30); }
+.wr-window[data-w="fog"] .wr-clouds { opacity: .5; }
+@keyframes wrDrift {
+  from { transform: translateX(-10px); }
+  to   { transform: translateX(14px); }
+}
+
+/* 雨 */
+.wr-window .wr-rain line {
+  stroke: rgba(190, 214, 250, .5);
+  stroke-width: 1; stroke-linecap: round;
+  opacity: 0;
+}
+.wr-window[data-w="rain"] .wr-rain line {
+  opacity: 1; animation: wrFall 1.15s linear infinite;
+}
+.wr-window .wr-rain line:nth-child(2) { animation-delay: .18s; }
+.wr-window .wr-rain line:nth-child(3) { animation-delay: .42s; }
+.wr-window .wr-rain line:nth-child(4) { animation-delay: .1s; }
+.wr-window .wr-rain line:nth-child(5) { animation-delay: .6s; }
+.wr-window .wr-rain line:nth-child(6) { animation-delay: .3s; }
+.wr-window .wr-rain line:nth-child(7) { animation-delay: .75s; }
+.wr-window .wr-rain line:nth-child(8) { animation-delay: .5s; }
+.wr-window .wr-rain line:nth-child(9) { animation-delay: .85s; }
+.wr-window .wr-rain line:nth-child(10) { animation-delay: .35s; }
+@keyframes wrFall {
+  from { transform: translateY(-14px); opacity: 0; }
+  25%  { opacity: .95; }
+  to   { transform: translateY(34px); opacity: 0; }
+}
+
+/* 雪 */
+.wr-window .wr-snow circle { fill: rgba(255, 255, 255, .85); opacity: 0; }
+.wr-window[data-w="snow"] .wr-snow circle {
+  opacity: 1; animation: wrSnow 7s linear infinite;
+}
+.wr-window .wr-snow circle:nth-child(2) { animation-delay: 1.4s; }
+.wr-window .wr-snow circle:nth-child(3) { animation-delay: 2.9s; }
+.wr-window .wr-snow circle:nth-child(4) { animation-delay: 4.2s; }
+.wr-window .wr-snow circle:nth-child(5) { animation-delay: 5.1s; }
+.wr-window .wr-snow circle:nth-child(6) { animation-delay: .7s; }
+@keyframes wrSnow {
+  from { transform: translate(0, -8px); opacity: 0; }
+  18%  { opacity: .95; }
+  to   { transform: translate(-7px, 66px); opacity: 0; }
+}
+
+/* 雾 */
+.wr-window .wr-fog { fill: rgba(206, 216, 228, .5); opacity: 0; transition: opacity 1.2s; }
+.wr-window[data-w="fog"] .wr-fog { opacity: .45; animation: wrFog 9s ease-in-out infinite alternate; }
+@keyframes wrFog { from { opacity: .28; } to { opacity: .5; } }
+
+/* 屋里透出去的暖光：只在天黑时出现 */
+.wr-window .wr-warm { opacity: 0; transition: opacity 1.4s; }
+.wr-window[data-t="night"] .wr-warm,
+.wr-window[data-t="dusk"] .wr-warm { opacity: 1; }
+
+/* 玻璃反光：一道斜光，偶尔扫过 */
+.wr-window .wr-sheen path { fill: rgba(255, 255, 255, .05); }
+.wr-window .wr-sheen { animation: wrSheen 14s ease-in-out infinite; }
+@keyframes wrSheen {
+  0%, 82%   { transform: translateX(-18px); opacity: 0; }
+  86%       { opacity: .8; }
+  100%      { transform: translateX(26px); opacity: 0; }
+}
+
+/* 窗框 / 窗棂 / 窗台 */
+.wr-window .wr-frame { fill: none; stroke: rgba(12, 14, 20, .55); stroke-width: 1.6; }
+.wr-window .wr-mull-v,
+.wr-window .wr-mull-h { stroke: rgba(12, 14, 20, .45); stroke-width: 2.2; }
+.wr-window .wr-sill {
+  stroke: rgba(10, 12, 18, .7); stroke-width: 4;
+  filter: drop-shadow(0 -1px 2px rgba(0, 0, 0, .5));
+}
+.wr-window::after {
+  content: "";
+  position: absolute; inset: 0;
+  pointer-events: none; border-radius: 4px;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, .05),
+    inset 0 12px 20px rgba(0, 0, 0, .30),
+    inset 0 -8px 14px rgba(0, 0, 0, .30);
+}
+
+.wr-note {
+  margin-top: 4px;
+  font-size: 10px;
+  letter-spacing: .04em;
+  color: var(--ink-soft);
+  opacity: .65;
+}
+
+/* ── 记忆星图（2026-11-10 v2）───────────────────────────
+   悬停放大、点击选中、图例可筛 */
+.wr-stars {
+  display: block;
+  width: 100%;
+  height: 150px;
+  margin-top: 4px;
+  border-radius: 4px;
+  background:
+    radial-gradient(120% 80% at 50% 0%, rgba(90, 120, 170, .10), transparent 60%),
+    linear-gradient(180deg, rgba(8, 12, 20, .62), rgba(8, 12, 20, .18));
+  cursor: crosshair;
+}
+.wr-stars circle {
+  transition: opacity .5s, r .18s, stroke .18s;
+  stroke: transparent; stroke-width: .6;
+}
+.wr-stars circle.s-evt  { fill: #e8eefc; }
+.wr-stars circle.s-mem  { fill: #9fc4e8; }
+.wr-stars circle.s-prom { fill: #e8a87c; }
+.wr-stars circle.s-gold { fill: #e9c46a; }
+.wr-stars circle:hover { stroke: rgba(255, 255, 255, .8); }
+.wr-stars circle.sel { stroke: #fff; stroke-width: .9; }
+.wr-stars circle.dim { opacity: .12 !important; }
+
+.wr-legend {
+  display: flex;
+  gap: 6px;
+  margin-top: 5px;
+}
+.wr-legend .wr-lg {
+  flex: 1;
+  padding: 2px 0;
+  border: 1px solid transparent;
+  border-radius: 4px;
+  background: transparent;
+  color: var(--ink-soft);
+  font: inherit;
+  font-size: 10px;
+  cursor: pointer;
+  opacity: .55;
+  transition: opacity .16s, border-color .16s, color .16s;
+}
+.wr-legend .wr-lg:hover { opacity: .9; }
+.wr-legend .wr-lg.off { opacity: .22; }
+.wr-legend .wr-lg i {
+  display: inline-block;
+  width: 5px; height: 5px;
+  margin-right: 3px;
+  border-radius: 50%;
+  vertical-align: middle;
+}
+.wr-legend .s-evt  { background: #e8eefc; }
+.wr-legend .s-mem  { background: #9fc4e8; }
+.wr-legend .s-prom { background: #e8a87c; }
+
+.wr-star-info {
+  margin-top: 4px;
+  font-size: 10px;
+  line-height: 1.5;
+  color: var(--ink-soft);
+  opacity: .6;
+  min-height: 2em;
+}
+.wr-star-info b { color: var(--gold, #c9a961); font-weight: 500; }
+
+/* ── 记忆星图（2026-11-10）──────────────────────────────── */
+.wr-stars {
+  display: block;
+  width: 100%;
+  height: 150px;
+  margin-top: 4px;
+  background: linear-gradient(180deg,
+      rgba(10, 14, 22, .55), rgba(10, 14, 22, .15));
+  border-radius: 4px;
+}
+.wr-stars circle { transition: opacity .6s, r .6s; }
+.wr-stars circle.s-evt  { fill: #e8eefc; }
+.wr-stars circle.s-mem  { fill: #9fc4e8; }
+.wr-stars circle.s-prom { fill: #e8a87c; }
+.wr-stars circle.s-gold { fill: #e9c46a; }
+
+.wr-legend {
+  display: flex;
+  gap: 10px;
+  margin-top: 4px;
+  font-size: 10px;
+  color: var(--ink-soft);
+  opacity: .6;
+}
+.wr-legend i {
+  display: inline-block;
+  width: 5px; height: 5px;
+  margin-right: 3px;
+  border-radius: 50%;
+  vertical-align: middle;
+}
+.wr-legend .s-evt  { background: #e8eefc; }
+.wr-legend .s-mem  { background: #9fc4e8; }
+.wr-legend .s-prom { background: #e8a87c; }
+
+
+/* 窗外 · 收尾（2026-11-10）
+   阴雨雪雾时不挂月亮；云往上压；加窗棂让"这是个窗"看得出来 */
+.wr-window[data-w="cloudy"] .wr-orb,
+.wr-window[data-w="rain"] .wr-orb,
+.wr-window[data-w="snow"] .wr-orb,
+.wr-window[data-w="fog"] .wr-orb { opacity: 0; }
+
+.wr-window[data-w="cloudy"] .wr-cloud { fill: rgba(255, 255, 255, .18); }
+.wr-window[data-w="rain"] .wr-cloud,
+.wr-window[data-w="snow"] .wr-cloud { fill: rgba(220, 228, 240, .22); }
+
+.wr-window::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: 3px;
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, .06),
+    inset 0 10px 18px rgba(0, 0, 0, .35),
+    inset 0 -6px 12px rgba(0, 0, 0, .28);
+}
+.wr-window::before {
+  content: "";
+  position: absolute;
+  left: 0; right: 0; top: 50%;
+  height: 2px;
+  pointer-events: none;
+  background: linear-gradient(180deg,
+      rgba(0, 0, 0, .28), rgba(255, 255, 255, .04));
+  opacity: .7;
+}
+
+
+/* 窗外 v3（2026-11-10）
+   云软化之后要压低对比；夜空星点只在夜里、非阴雨时出现。 */
+.wr-window .wr-cloud { fill: rgba(255, 255, 255, .20); }
+.wr-window[data-w="cloudy"] .wr-cloud { fill: rgba(255, 255, 255, .16); }
+.wr-window[data-w="rain"] .wr-cloud { fill: rgba(200, 210, 226, .18); }
+.wr-window[data-w="snow"] .wr-cloud { fill: rgba(235, 240, 250, .24); }
+
+.wr-window .wr-nightstars circle {
+  fill: rgba(220, 232, 255, .75);
+  opacity: 0;
+  transition: opacity 1.2s;
+}
+.wr-window[data-t="night"] .wr-nightstars circle { opacity: .55; }
+.wr-window[data-t="night"][data-w="clear"] .wr-nightstars circle { opacity: .9; }
+.wr-window[data-t="night"][data-w="rain"] .wr-nightstars circle,
+.wr-window[data-t="night"][data-w="snow"] .wr-nightstars circle,
+.wr-window[data-t="night"][data-w="fog"] .wr-nightstars circle { opacity: .12; }
+
+/* 暖光收窄：只贴底边一条 */
+.wr-window .wr-warm { height: 16px; }
+
+/* 星图图例：字大一点、间距松一点 */
+.wr-legend { gap: 8px; margin-top: 7px; }
+.wr-legend .wr-lg {
+  font-size: 10.5px;
+  letter-spacing: .04em;
+  padding: 3px 0;
+  opacity: .72;
+}
+.wr-legend .wr-lg i { width: 6px; height: 6px; margin-right: 4px; }
+.wr-star-info { font-size: 10.5px; opacity: .72; }
+
+
+/* 云 v4（2026-11-10）：改成带圆瓣的 path 之后，靠透明度做出体积 */
+.wr-window .wr-cloud { fill: rgba(255, 255, 255, .26); }
+.wr-window .wr-cloud-thin { fill: rgba(255, 255, 255, .16); }
+.wr-window[data-w="cloudy"] .wr-cloud { fill: rgba(255, 255, 255, .22); }
+.wr-window[data-w="rain"] .wr-cloud { fill: rgba(198, 210, 228, .22); }
+.wr-window[data-w="rain"] .wr-cloud-thin { fill: rgba(198, 210, 228, .14); }
+.wr-window[data-w="snow"] .wr-cloud { fill: rgba(238, 243, 252, .26); }
+.wr-window[data-t="night"] .wr-cloud { fill: rgba(198, 210, 232, .16); }
+.wr-window[data-t="night"] .wr-cloud-thin { fill: rgba(198, 210, 232, .10); }
+
+
+/* 星图点开后的那两句原话（2026-11-10） */
+.wr-quote {
+  margin-top: 5px;
+  padding-left: 6px;
+  border-left: 1px solid color-mix(in srgb, var(--gold, #c9a961) 35%, transparent);
+  font-size: 10px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+  opacity: .72;
+}
+
+/* ═══ 宏观层次（2026-11-10） ══════════════════════════════════════════════════
+   1) 肌理降对比：让它退到背景里去，只在空白处隐约可见
+   2) 三栏间距统一到 16px 网格
+   3) 聊天区一层极淡的玻璃底 —— 前后景分开
+   4) 字号四档：15 / 12.5 / 11 / 10
+   ══════════════════════════════════════════════════════════ */
+
+/* ── 1) 肌理 ─────────────────────────────────────────────
+   原来水纹 .5 / 纸纹 .55，字一密就"发毛"。降到一半以下。 */
+:root {
+  --tex-water: .26;
+  --tex-paper: .32;
+}
+body[data-theme="moon"] { --tex-water: .24; --tex-paper: .20; }
+body[data-theme="ink"]  { --tex-water: .22; --tex-paper: .18; }
+body[data-theme="candle"] { --tex-water: .20; --tex-paper: .20; }
+
+/* 肌理再退一层：对话区正下方几乎不留 */
+body::before { opacity: var(--tex-water); }
+
+/* ── 2) 间距：16px 网格 ───────────────────────────────── */
+.panel {
+  padding: 16px;
+  gap: 16px;
+}
+.qq-rail { padding: 16px 14px; gap: 14px; }
+.log { padding: 18px 16px; gap: 12px; }
+
+/* 三栏之间用同一条细线分隔，厚度一致 */
+.panel { border-right: 1px solid var(--line); }
+.chat {
+  border-left: 1px solid color-mix(in srgb, var(--line) 55%, transparent);
+  border-right: 1px solid color-mix(in srgb, var(--line) 55%, transparent);
+}
+
+/* ── 3) 聊天区：极淡的一层玻璃，配一点点投影 ───────────── */
+.chat {
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--paper) 55%, transparent) 0%,
+      color-mix(in srgb, var(--paper) 30%, transparent) 100%),
+    var(--chat-veil);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, .35) inset,
+    0 12px 34px rgba(60, 50, 30, .06);
+}
+body[data-theme="moon"] .chat,
+body[data-theme="ink"] .chat,
+body[data-theme="candle"] .chat {
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, .05) inset,
+    0 12px 34px rgba(0, 0, 0, .35);
+}
+
+/* ── 4) 字号四档 + 对话可读性 ─────────────────────────── */
+:root {
+  --fs-title: 15px;
+  --fs-body: 12.5px;
+  --fs-label: 11px;
+  --fs-micro: 10px;
+}
+
+/* 她的气泡：对比度提一档，行高 1.75 保持 */
+.bubble {
+  line-height: 1.75;
+  font-size: 14.5px;
+}
+body[data-theme] .bubble {
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+}
+/* 他自己的话淡一点，但别淡到看不清 */
+.msg.me .bubble {
+  background: color-mix(in srgb, var(--me-bubble) 92%, transparent);
+}
+
+/* 侧栏的微标签统一到 label 档 */
+.qr-row .qr-k,
+.qr-cap,
+.life-item .k {
+  font-size: var(--fs-label);
+}
+.qr-row .qr-v,
+.life-item .v {
+  font-size: var(--fs-body);
+}
+.qr-note,
+.wr-note,
+.wr-star-info,
+.time-stamp,
+.msg-time {
+  font-size: var(--fs-micro);
+}
+
+/* ═══ 设计一遍（2026-11-10） ═════════════════════════════════════════════════
+   网格 / 对齐 / 字距 / 对比 / 分隔 / 圆角 / 滚动条 / 焦点
+   原则：靠"差距"建立层次，不靠多加颜色。
+   ══════════════════════════════════════════════════════════ */
+
+/* ── 网格：中栏 320（16×20），左右栏内边距同一条基线 ───────── */
+.panel { width: 320px; flex: 0 0 320px; padding: 16px; }
+.qq-rail { padding: 16px; }
+.composer { padding: 12px 16px 16px; }
+
+/* 立绘：居中（margin auto）+ 上下 12px；尺寸 200 → 184。
+   2026-11-10 修：上一版写成 margin: 12px 0，把原来的 margin:0 auto
+   盖掉了，立绘就贴左边 —— 这就是"偏移"。 */
+.portrait-frame {
+  width: 184px;
+  height: 184px;
+  margin: 12px auto;
+}
+
+/* ── 对齐：侧栏的值右对齐 + 等宽数字 ─────────────────────── */
+.qr-row { display: flex; align-items: baseline; justify-content: space-between; }
+.qr-row .qr-k { flex: 0 0 auto; }
+.qr-row .qr-v {
+  flex: 0 1 auto;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: .01em;
+}
+.life-item { display: flex; align-items: baseline; gap: 10px; }
+.life-item .v {
+  flex: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── 字距：小字要松，标题微松 ────────────────────────────── */
+.qr-cap,
+.life-title,
+.panel-title,
+.qr-head span {
+  letter-spacing: .08em;
+}
+.msg-time,
+.xp-label,
+.qr-note,
+.wr-note,
+.wr-star-info {
+  letter-spacing: .06em;
+}
+.bubble { letter-spacing: .01em; }
+
+/* 数字统一等宽，读起来是一条竖线 */
+.big-clock,
+#railHearts,
+.days-num,
+.stat-num {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── 对比：标题沉、标签淡（用透明度而不是换颜色）──────────── */
+.qr-cap,
+.life-title,
+.panel-title {
+  color: var(--ink);
+  opacity: .82;
+}
+.qr-row .qr-k,
+.life-item .k {
+  opacity: .58;
+}
+.qr-row .qr-v,
+.life-item .v {
+  opacity: .92;
+}
+
+/* 区块之间的间距 > 区块内的行距：让"组"自己抱成团 */
+.qr-block { display: flex; flex-direction: column; gap: 8px; }
+.qr-sep {
+  height: 1px;
+  margin: 18px 0;
+  border: 0;
+  background: linear-gradient(90deg,
+      transparent, color-mix(in srgb, var(--line) 70%, transparent), transparent);
+}
+
+/* ── 分隔线两端渐隐（比硬线安静）──────────────────────────── */
+header, .chat-header, .composer {
+  border-color: transparent;
+  background-image: linear-gradient(90deg,
+      transparent, color-mix(in srgb, var(--line) 60%, transparent), transparent);
+  background-repeat: no-repeat;
+  background-size: 100% 1px;
+}
+.chat-header { background-position: 0 100%; }
+.composer { background-position: 0 0; }
+
+/* ── 圆角：气泡 12，靠说话人那侧收成 4 ──────────────────── */
+.bubble {
+  border-radius: 12px 12px 12px 4px;
+  padding: 10px 14px;
+}
+.msg.me .bubble { border-radius: 12px 12px 4px 12px; }
+
+/* 时间戳：小、淡、松 */
+.msg-time {
+  font-size: 10px;
+  opacity: .42;
+}
+
+/* ── 滚动条：细、低对比，悬停才明显 ─────────────────────── */
+* { scrollbar-width: thin; scrollbar-color: rgba(120, 110, 90, .28) transparent; }
+*::-webkit-scrollbar { width: 6px; height: 6px; }
+*::-webkit-scrollbar-thumb {
+  background: rgba(120, 110, 90, .22);
+  border-radius: 3px;
+}
+*::-webkit-scrollbar-thumb:hover { background: rgba(120, 110, 90, .40); }
+*::-webkit-scrollbar-track { background: transparent; }
+
+/* ── 焦点：键盘操作时一圈金环，鼠标点击不出现 ───────────── */
+:focus-visible {
+  outline: 1px solid color-mix(in srgb, var(--gold) 70%, transparent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ── 输入框：从"白盒子"变成一张纸 ──────────────────────── */
+.composer input,
+.composer textarea {
+  background: color-mix(in srgb, var(--paper) 70%, transparent);
+  border: 1px solid color-mix(in srgb, var(--line) 55%, transparent);
+  border-radius: 10px;
+  padding: 9px 12px;
+  transition: border-color .16s, background .16s;
+}
+.composer input:focus,
+.composer textarea:focus {
+  border-color: color-mix(in srgb, var(--gold) 45%, transparent);
+  background: color-mix(in srgb, var(--paper) 86%, transparent);
+}
+
+/* ═══ 中栏：一张卡片（2026-11-10） ═══════════════════════════════
+   从"标签—值"的表格，改成她写下的一张便签。
+   ══════════════════════════════════════════════════════════ */
+
+/* 身份区：名字大、字距松、金色只给时间与关系 */
+.name-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 6px;
+}
+.name-row .name {
+  font-size: 20px;
+  letter-spacing: .10em;
+  color: var(--ink);
+}
+.name-row .stage {
+  font-size: 10.5px;
+  letter-spacing: .06em;
+  padding: 1px 7px;
+  border: 1px solid color-mix(in srgb, var(--line) 75%, transparent);
+  border-radius: 999px;
+  opacity: .7;
+}
+.affection { margin-top: 10px; }
+.affection .bar { height: 2px; }
+.bar-label {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+  font-size: 10.5px;
+  letter-spacing: .04em;
+  opacity: .62;
+}
+.bar-label #affText { font-variant-numeric: tabular-nums; }
+
+/* 她此刻：一张纸 */
+.note-card {
+  position: relative;
+  margin-top: 14px;
+  padding: 14px 14px 12px;
+  border: 1px solid color-mix(in srgb, var(--line) 55%, transparent);
+  border-radius: 10px;
+  background:
+    linear-gradient(180deg,
+      color-mix(in srgb, var(--paper) 78%, transparent) 0%,
+      color-mix(in srgb, var(--paper-2) 66%, transparent) 100%);
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, .5) inset,
+    0 6px 18px rgba(120, 105, 75, .07);
+}
+body[data-theme="moon"] .note-card,
+body[data-theme="ink"] .note-card,
+body[data-theme="candle"] .note-card {
+  box-shadow:
+    0 1px 0 rgba(255, 255, 255, .05) inset,
+    0 6px 18px rgba(0, 0, 0, .35);
+}
+
+.note-card .life-title { margin-bottom: 8px; }
+
+/* 每一行：标签在行首，小、淡、松；值在下面自成一段 */
+.note-row {
+  margin-top: 12px;
+}
+.note-row:first-of-type { margin-top: 4px; }
+.note-row .note-k {
+  display: block;
+  margin-bottom: 3px;
+  font-size: 10px;
+  letter-spacing: .14em;
+  color: var(--ink-soft);
+  opacity: .55;
+}
+.note-row .note-v {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.75;
+  color: var(--ink);
+  opacity: .9;
+}
+.note-row-soft .note-v {
+  font-size: 12px;
+  opacity: .66;
+}
+/* 心情那行：标签和色块同一行 */
+.note-row-mood {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+}
+.note-row-mood .note-k {
+  display: inline;
+  margin: 0;
+  flex: 0 0 auto;
+}
+
+/* 引号：像她在说话，不是在报状态 */
+.note-row .note-v::before {
+  content: "“";
+  color: var(--ink-soft);
+  opacity: .35;
+  margin-right: 1px;
+}
+.note-row .note-v::after {
+  content: "”";
+  color: var(--ink-soft);
+  opacity: .35;
+  margin-left: 1px;
+}
+.note-row .note-v:empty::before,
+.note-row .note-v:empty::after { content: ""; }
+
+/* 收藏入口：退成一行淡字 */
+.fav-open {
+  display: block;
+  width: 100%;
+  margin: 2px 0 4px;
+  padding: 4px 0;
+  border: 0;
+  border-bottom: 1px dashed color-mix(in srgb, var(--line) 60%, transparent);
+  background: transparent;
+  color: var(--ink-soft);
+  font: inherit;
+  font-size: 10.5px;
+  letter-spacing: .08em;
+  text-align: left;
+  opacity: .55;
+  cursor: pointer;
+}
+.fav-open:hover { opacity: .85; }
+.fav-open b { font-weight: 500; opacity: .8; }
+
+/* 折叠区：标题也小一号、松一点 */
+.fold > summary { letter-spacing: .06em; }
+.fold > summary .fold-name { font-size: 11px; opacity: .75; }
+
+
+/* 中栏收尾（2026-11-10） */
+.bar-label {
+  font-size: 10px;
+  gap: 8px;
+}
+.bar-label > span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.bar-label #affNext { text-align: right; opacity: .85; }
+
+/* 次要信息（小麻烦/口味）压两行，超出省略 */
+.note-row-soft .note-v {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* 卡片底部松一点 */
+.note-card { padding-bottom: 16px; }

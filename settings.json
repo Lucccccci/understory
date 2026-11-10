@@ -1,0 +1,27 @@
+{
+  "save_name": "latest",
+  "use_game_relation": false,
+  "portrait_source": "local",
+  "theme": "ink",
+  "bgm_enabled": false,
+  "bgm_track": "",
+  "bgm_volume": 0.3,
+  "city": {
+    "name": "",
+    "lat": 0,
+    "lon": 0
+  },
+  "qq": {
+    "bot_uin": 0,
+    "owner_uin": 0,
+    "autostart": false,
+    "snowluma": {
+      "dir": "",
+      "base": "http://127.0.0.1:5099",
+      "username": "admin",
+      "password": ""
+    },
+    "_说明": "bot_uin = 这个角色用的 QQ；owner_uin = 你自己的 QQ。snowluma.dir 指向 SnowLuma 解压目录。"
+  },
+  "_version": "0.1.0"
+}

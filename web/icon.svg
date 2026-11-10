@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" role="img" aria-label="黍">
+  <defs>
+    <radialGradient id="ink" cx="50%" cy="40%" r="64%">
+      <stop offset="0%"   stop-color="#2c313a"/>
+      <stop offset="62%"  stop-color="#1b1f26"/>
+      <stop offset="100%" stop-color="#10131a"/>
+    </radialGradient>
+
+    <linearGradient id="grain" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%"   stop-color="#f0dcaa"/>
+      <stop offset="50%"  stop-color="#cfa960"/>
+      <stop offset="100%" stop-color="#8a6c31"/>
+    </linearGradient>
+
+    <radialGradient id="jade" cx="50%" cy="50%" r="50%">
+      <stop offset="0%"   stop-color="#7ea79a" stop-opacity=".42"/>
+      <stop offset="100%" stop-color="#7ea79a" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- 底 -->
+  <rect x="16" y="16" width="480" height="480" rx="118" fill="url(#ink)"/>
+  <rect x="16" y="16" width="480" height="480" rx="118" fill="none"
+        stroke="#c9a961" stroke-opacity=".26" stroke-width="4"/>
+
+  <!-- 玉璧 -->
+  <circle cx="256" cy="250" r="148" fill="url(#jade)"/>
+  <circle cx="256" cy="250" r="148" fill="none"
+          stroke="#7ea79a" stroke-opacity=".20" stroke-width="3"/>
+
+  <!-- 稻穗 -->
+  <g fill="url(#grain)">
+    <path d="M256 384 C252 322 250 262 258 192"
+          fill="none" stroke="url(#grain)" stroke-width="16" stroke-linecap="round"/>
+    <path d="M254 296 C228 288 212 272 205 249 C232 251 251 264 254 296 Z"/>
+    <path d="M255 246 C233 238 221 224 215 205 C238 207 253 219 255 246 Z"/>
+    <path d="M257 296 C283 288 299 272 306 249 C279 251 260 264 257 296 Z"/>
+    <path d="M256 246 C278 238 290 224 296 205 C273 207 258 219 256 246 Z"/>
+    <path d="M258 192 C250 170 254 148 268 130 C280 152 278 174 258 192 Z"/>
+  </g>
+
+  <!-- 印底一道横线：像落款压住的那一笔 -->
+  <rect x="196" y="404" width="120" height="10" rx="5"
+        fill="#c9a961" fill-opacity=".55"/>
+</svg>

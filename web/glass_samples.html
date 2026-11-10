@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>玻璃质感 · 三个样例</title>
+<style>
+  :root{
+    --bg:#14171d; --paper:#f3ede1; --ink:#38322a; --gold:#c9a961;
+    --jade:#7ea79a; --line:#d8cdb6;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; padding:36px 30px 60px; background:#0d0f13;
+    font-family:"Songti SC","Noto Serif CJK SC",serif; color:#e9e3d6;
+  }
+  h2{font-size:13px;letter-spacing:.22em;color:#8d8577;font-weight:400;
+     margin:0 0 12px}
+  .tag{font-size:11px;color:#6f6859;letter-spacing:.1em;margin:0 0 10px}
+
+  /* 每个样例：一块「界面」 */
+  .demo{
+    width:880px; height:360px; border-radius:14px; overflow:hidden;
+    display:flex; margin-bottom:46px; position:relative;
+    background:
+      radial-gradient(120% 90% at 20% 0%, #2a3038 0%, #191d24 55%, #12151a 100%);
+  }
+  /* 底纹：模拟纸纹/噪点，玻璃要靠它才看得出来 */
+  .demo::before{
+    content:''; position:absolute; inset:0; opacity:.5;
+    background-image:
+      radial-gradient(circle at 30% 20%, rgba(201,169,97,.10) 0 2px, transparent 2px),
+      radial-gradient(circle at 70% 60%, rgba(126,167,154,.10) 0 2px, transparent 2px);
+    background-size:120px 120px, 160px 160px;
+  }
+
+  .side{width:260px; padding:18px; display:flex; flex-direction:column; gap:12px;
+        position:relative; z-index:2}
+  .main{flex:1; padding:18px; position:relative; z-index:2;
+        display:flex; flex-direction:column; gap:12px}
+
+  .card{border-radius:10px; padding:12px 14px; font-size:12px; line-height:1.7}
+  .name{font-size:22px; letter-spacing:.2em; color:#efe6d2}
+  .stage{font-size:11px; color:var(--gold); border:1px solid rgba(201,169,97,.45);
+         border-radius:999px; padding:1px 8px; margin-left:8px}
+  .row{display:flex; justify-content:space-between; color:#cfc6b4}
+  .k{color:#9fae9d}
+
+  .bubble{border-radius:12px; padding:10px 13px; font-size:12.5px; line-height:1.75;
+          max-width:74%; color:#e8e0cf}
+  .me{align-self:flex-end; color:#f0e8d8}
+  .her{align-self:flex-start}
+
+  /* ══════════ 变体 1：柔和玻璃 ══════════ */
+  .v1 .card, .v1 .bubble{
+    background:rgba(243,237,225,.10);
+    -webkit-backdrop-filter:blur(12px) saturate(120%);
+    backdrop-filter:blur(12px) saturate(120%);
+    border:1px solid rgba(243,237,225,.14);
+    box-shadow:0 8px 24px rgba(0,0,0,.28);
+  }
+  .v1 .bubble.me{background:rgba(201,169,97,.14); border-color:rgba(201,169,97,.22)}
+  .v1 .bubble.her{background:rgba(243,237,225,.13)}
+
+  /* ══════════ 变体 2：磨砂深色 ══════════ */
+  .v2 .card, .v2 .bubble{
+    background:rgba(20,23,29,.55);
+    -webkit-backdrop-filter:blur(20px) saturate(135%) brightness(1.05);
+    backdrop-filter:blur(20px) saturate(135%) brightness(1.05);
+    border:1px solid rgba(255,255,255,.09);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.07), 0 10px 26px rgba(0,0,0,.35);
+  }
+  .v2 .bubble.me{background:rgba(201,169,97,.16); border-color:rgba(201,169,97,.26)}
+  .v2 .name{color:#f2ead8}
+
+  /* ══════════ 变体 3：亚克力（带高光与渐变） ══════════ */
+  .v3 .card, .v3 .bubble{
+    background:linear-gradient(160deg, rgba(255,255,255,.10) 0%, rgba(255,255,255,.03) 42%, rgba(0,0,0,.10) 100%),
+               rgba(24,28,35,.42);
+    -webkit-backdrop-filter:blur(26px) saturate(150%);
+    backdrop-filter:blur(26px) saturate(150%);
+    border:1px solid rgba(255,255,255,.12);
+    box-shadow:inset 0 1px 0 rgba(255,255,255,.16), 0 14px 32px rgba(0,0,0,.42);
+  }
+  .v3 .bubble.me{background:linear-gradient(160deg, rgba(201,169,97,.22), rgba(201,169,97,.08))}
+  .v3 .card{position:relative; overflow:hidden}
+  .v3 .card::after{       /* 亚克力那一道斜高光 */
+    content:''; position:absolute; inset:-40% -60% auto auto; width:70%; height:180%;
+    background:linear-gradient(115deg, rgba(255,255,255,.14), transparent 60%);
+    transform:rotate(-12deg); pointer-events:none;
+  }
+</style>
+</head>
+<body>
+
+<h2>玻璃质感 · 三个样例</h2>
+<p class="tag">下面三块是同一套布局，只换玻璃的做法。看哪一块顺眼。</p>
+
+<!-- ── 1 ── -->
+<h2>一 · 柔和玻璃</h2>
+<p class="tag">模糊 12px、透明度低、边框细。最轻，几乎不改变原来的观感。</p>
+<div class="demo v1">
+  <div class="side">
+    <div class="card"><div class="name">她<span class="stage">交往</span></div></div>
+    <div class="card">
+      <div class="row"><span class="k">你的日子</span><span>记忆 14 · 观察 12</span></div>
+      <div class="row"><span class="k">你们的旧事</span><span>事件 21 · 待办 2</span></div>
+      <div class="row"><span class="k">眼下</span><span>暮秋 · 阴 16°</span></div>
+    </div>
+  </div>
+  <div class="main">
+    <div class="bubble her">（把窗掩了半扇）<br>风起了，进来坐</div>
+    <div class="bubble me">刚回来，路上有点冷</div>
+    <div class="bubble her">那就先别说话，暖一会儿</div>
+  </div>
+</div>
+
+<!-- ── 2 ── -->
+<h2>二 · 磨砂深色</h2>
+<p class="tag">模糊 20px、底色压暗、内高光。厚一点，像磨砂玻璃后面的夜。</p>
+<div class="demo v2">
+  <div class="side">
+    <div class="card"><div class="name">她<span class="stage">交往</span></div></div>
+    <div class="card">
+      <div class="row"><span class="k">你的日子</span><span>记忆 14 · 观察 12</span></div>
+      <div class="row"><span class="k">你们的旧事</span><span>事件 21 · 待办 2</span></div>
+      <div class="row"><span class="k">眼下</span><span>暮秋 · 阴 16°</span></div>
+    </div>
+  </div>
+  <div class="main">
+    <div class="bubble her">（把窗掩了半扇）<br>风起了，进来坐</div>
+    <div class="bubble me">刚回来，路上有点冷</div>
+    <div class="bubble her">那就先别说话，暖一会儿</div>
+  </div>
+</div>
+
+<!-- ── 3 ── -->
+<h2>三 · 亚克力</h2>
+<p class="tag">模糊 26px、强饱和、一道斜高光。最贵的样子，也最容易显脏。</p>
+<div class="demo v3">
+  <div class="side">
+    <div class="card"><div class="name">她<span class="stage">交往</span></div></div>
+    <div class="card">
+      <div class="row"><span class="k">你的日子</span><span>记忆 14 · 观察 12</span></div>
+      <div class="row"><span class="k">你们的旧事</span><span>事件 21 · 待办 2</span></div>
+      <div class="row"><span class="k">眼下</span><span>暮秋 · 阴 16°</span></div>
+    </div>
+  </div>
+  <div class="main">
+    <div class="bubble her">（把窗掩了半扇）<br>风起了，进来坐</div>
+    <div class="bubble me">刚回来，路上有点冷</div>
+    <div class="bubble her">那就先别说话，暖一会儿</div>
+  </div>
+</div>
+
+</body>
+</html>

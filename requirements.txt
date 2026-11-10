@@ -1,0 +1,15 @@
+# mind-app · 运行依赖
+#
+# 只跑服务（网页 / API / QQ 通道）：
+#     python chat_app.py
+#   → 不需要下面任何一条，标准库就够。
+#
+# 想要「独立窗口」（desktop.py）时才需要这条：
+#     python desktop.py
+#
+pywebview>=6.0        # 原生窗口（Windows 用 WebView2 / macOS WKWebView / Linux WebKit）
+
+# 可选：接 QQ 通道
+#   websocket-client>=1.7      # extras/qq/ 里的正向 WS 用
+# 可选：给角色配语音
+#   （本仓库不含语音，语音属于角色本身，自己接 TTS 即可）

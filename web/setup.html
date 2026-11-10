@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>开始 · mind</title>
+<style>
+  :root{
+    --ink:#e8e4d8; --dim:#9a978c; --line:rgba(255,255,255,.10);
+    --bg:#14161b; --card:rgba(255,255,255,.035); --gold:#c9a961;
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; min-height:100vh; background:
+      radial-gradient(120% 80% at 50% -10%, #1d2028, #101218 60%);
+    color:var(--ink); font-family:"Songti SC","SimSun","Noto Serif CJK SC",serif;
+    display:flex; align-items:flex-start; justify-content:center; padding:6vh 16px;
+  }
+  .wrap{width:min(760px,100%)}
+  h1{font-size:22px; letter-spacing:.14em; margin:0 0 6px; font-weight:500}
+  .sub{color:var(--dim); font-size:12.5px; letter-spacing:.06em; margin-bottom:26px}
+  .card{
+    background:var(--card); border:1px solid var(--line); border-radius:12px;
+    padding:20px 20px 16px; margin-bottom:14px;
+  }
+  label{display:block; font-size:11px; letter-spacing:.12em; color:var(--dim);
+        margin:14px 0 6px}
+  label:first-child{margin-top:0}
+  input,textarea,select{
+    width:100%; padding:9px 11px; border-radius:8px;
+    background:rgba(255,255,255,.05); border:1px solid var(--line);
+    color:var(--ink); font:inherit; font-size:13.5px; line-height:1.7;
+  }
+  input:focus,textarea:focus,select:focus{
+    outline:none; border-color:rgba(201,169,97,.55);
+    background:rgba(255,255,255,.075);
+  }
+  textarea{min-height:230px; resize:vertical; font-size:13px}
+  .row{display:flex; gap:12px}
+  .row > div{flex:1}
+  .hint{color:var(--dim); font-size:11px; margin-top:5px; line-height:1.6}
+  .btn{
+    margin-top:18px; width:100%; padding:11px; border-radius:9px; cursor:pointer;
+    background:rgba(201,169,97,.16); border:1px solid rgba(201,169,97,.45);
+    color:var(--gold); font:inherit; font-size:13.5px; letter-spacing:.16em;
+  }
+  .btn:hover{background:rgba(201,169,97,.24)}
+  .btn[disabled]{opacity:.5; cursor:default}
+  .err{color:#e08b7a; font-size:12px; margin-top:10px; min-height:1em}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>先把她填出来</h1>
+  <div class="sub">填完这几项就能开始。以后想改，直接编辑 personas/current.json。</div>
+
+  <div class="card">
+    <label for="name">名字</label>
+    <input id="name" placeholder="例如：阿岚">
+
+    <div class="row">
+      <div>
+        <label for="call">你怎么称呼 TA</label>
+        <input id="call" placeholder="例如：你 / 名字 / 博士">
+      </div>
+      <div>
+        <label for="pron">代词</label>
+        <select id="pron">
+          <option value="她">她</option>
+          <option value="他">他</option>
+          <option value="TA">TA</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="row">
+      <div>
+        <label for="city">所在城市</label>
+        <input id="city" placeholder="留空按当地">
+      </div>
+      <div>
+        <label for="lat">纬度</label>
+        <input id="lat" placeholder="31.30">
+      </div>
+      <div>
+        <label for="lon">经度</label>
+        <input id="lon" placeholder="120.62">
+      </div>
+    </div>
+    <div class="hint">季节和天气按这里算。城市名只用于显示，真正生效的是经纬度。</div>
+  </div>
+
+  <div class="card">
+    <label for="card">人格正文（最重要）</label>
+    <textarea id="card" spellcheck="false"></textarea>
+    <div class="hint">把她是谁、怎么说话、你们什么关系写清楚。留空也能跑，但会像个通用助手。</div>
+  </div>
+
+  <div class="card">
+    <label>QQ（可选）</label>
+    <div class="row">
+      <div>
+        <label for="qq_bot">这个角色的 QQ 号</label>
+        <input id="qq_bot" placeholder="例如 0">
+      </div>
+      <div>
+        <label for="qq_owner">你自己的 QQ 号</label>
+        <input id="qq_owner" placeholder="只有这个号能找到她">
+      </div>
+    </div>
+
+    <label for="qq_dir">SnowLuma 目录</label>
+    <input id="qq_dir" placeholder="例如 D:\shu-qq\snowluma">
+
+    <div class="row">
+      <div>
+        <label for="qq_user">面板用户名</label>
+        <input id="qq_user" placeholder="admin">
+      </div>
+      <div>
+        <label for="qq_pass">面板密码</label>
+        <input id="qq_pass" type="password" placeholder="SnowLuma 第一次启动时打印的">
+      </div>
+    </div>
+
+    <label style="display:flex;align-items:center;gap:8px;margin-top:14px">
+      <input type="checkbox" id="qq_auto" style="width:auto">
+      <span style="font-size:12px;letter-spacing:.06em">启动时自动接 QQ</span>
+    </label>
+    <div class="hint">不填也能用 —— 网页版不需要 QQ。填了才能在手机上找到她。</div>
+  </div>
+
+  <div class="card">
+    <label for="key">API 密钥</label>
+    <input id="key" type="password" placeholder="sk-...">
+    <div class="hint">只写进本机的 .apikey 文件，不会上传。</div>
+
+    <button class="btn" id="go">开 始</button>
+    <div class="err" id="err"></div>
+  </div>
+</div>
+
+<script>
+const SKELETON = `## 你是谁
+
+你是______（名字）。______（一句话：你在哪做事、什么身份）。
+
+**你不是在回答问题，你是在和他过日子。**
+你有自己的手边事：______、______、______。
+
+## 你怎么说话
+
+- 短句为主，像随口说的，不用书面语。
+- 不总结、不列点、不说「希望对你有帮助」。
+- 关心落在具体的小事上：吃没吃、冷不冷、几点睡。
+- 不确定的事不装懂；不想说就嗯一声。
+
+## 你们的关系
+
+______（刚认识 / 熟人 / 亲近 / 恋人）。
+
+## 你改不掉的习惯
+
+1. ______
+2. ______
+3. ______
+`;
+
+const $ = (id) => document.getElementById(id);
+
+(async function init() {
+  try {
+    const st = await (await fetch('/api/setup')).json();
+    if (st.characterCard) $('card').value = st.characterCard;
+    else $('card').value = SKELETON;
+    if (st.name) $('name').value = st.name;
+    if (st.call_name) $('call').value = st.call_name;
+    if (st.pronoun) $('pron').value = st.pronoun;
+    if (st.city) $('city').value = st.city.name || '';
+    if (st.city && st.city.lat) $('lat').value = st.city.lat;
+    if (st.city && st.city.lon) $('lon').value = st.city.lon;
+    const qq = st.qq || {};
+    if (qq.bot_uin) $('qq_bot').value = qq.bot_uin;
+    if (qq.owner_uin) $('qq_owner').value = qq.owner_uin;
+    if (qq.autostart) $('qq_auto').checked = true;
+    const sl = qq.snowluma || {};
+    if (sl.dir) $('qq_dir').value = sl.dir;
+    if (sl.username) $('qq_user').value = sl.username;
+    if (sl.password) $('qq_pass').value = sl.password;
+  } catch (e) {
+    $('card').value = SKELETON;
+  }
+})();
+
+$('go').addEventListener('click', async () => {
+  const body = {
+    name: $('name').value.trim(),
+    call_name: $('call').value.trim(),
+    pronoun: $('pron').value,
+    city: { name: $('city').value.trim(),
+            lat: parseFloat($('lat').value) || 0,
+            lon: parseFloat($('lon').value) || 0 },
+    characterCard: $('card').value,
+    api_key: $('key').value.trim(),
+    qq: {
+      bot_uin: parseInt($('qq_bot').value, 10) || 0,
+      owner_uin: parseInt($('qq_owner').value, 10) || 0,
+      autostart: $('qq_auto').checked,
+      snowluma: {
+        dir: $('qq_dir').value.trim(),
+        username: $('qq_user').value.trim(),
+        password: $('qq_pass').value,
+      },
+    },
+  };
+  if (!body.name) { $('err').textContent = '名字不能空。'; return; }
+  $('go').disabled = true;
+  $('err').textContent = '';
+  try {
+    const r = await fetch('/api/setup', {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(body)
+    });
+    const d = await r.json();
+    if (!d.ok) { $('err').textContent = d.error || '保存失败'; $('go').disabled = false; return; }
+    location.href = '/';
+  } catch (e) {
+    $('err').textContent = '请求失败：' + e.message;
+    $('go').disabled = false;
+  }
+});
+</script>
+</body>
+</html>
