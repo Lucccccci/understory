@@ -1,4 +1,4 @@
-# mind
+# understory
 
 > **v0.1（试用版）** —— 机制齐全，接口可能还会变。
 
@@ -189,7 +189,7 @@ saves/                 ← 全部在这，和其它项目互不影响
 ## 目录
 
 ```
-mind-framework/
+understory/
   personas/        人设（blank.json 是空模板，example.json 是示例）
   web/             界面（index.html / app.js / style.css / setup.html）
   saves/           运行时数据（不进仓库）
